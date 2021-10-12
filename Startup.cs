@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using device_wall_backend.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace device_wall_backend
 {
@@ -26,14 +28,14 @@ namespace device_wall_backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddEntityFrameworkNpgsql().AddDbContext<DeviceWallContext>(opt =>
+            opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "device_wall_backend", Version = "v1" });
             });
-            services.AddEntityFrameworkNpgsql().AddDbContext<DeviceWallContext>(opt =>
-            opt.UseNpgsql(Configuration.GetConnectionString("PostgreSQLConnection")));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
