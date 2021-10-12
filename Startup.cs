@@ -32,6 +32,8 @@ namespace device_wall_backend
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "device_wall_backend", Version = "v1" });
             });
+            services.AddEntityFrameworkNpgsql().AddDbContext<DeviceWallContext>(opt =>
+            opt.UseNpgsql(Configuration.GetConnectionString("PostgreSQLConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
