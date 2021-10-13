@@ -1,0 +1,33 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  api:
+    image: devicewallbackend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      ConnectionStrings__DefaultConnection: "host=postgres_image;password=mobiledevicewall;Port=5432;Database=mobileDeviceWallDB;"
+      DB_CONNECTION_STRING: "host=postgres_image;password=mobiledevicewall;Port=5432;Database=mobileDeviceWallDB;"
+    
+  postgres_image:
+    image: postgres:latest
+    ports:
+      - "5432"
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "mobiledevicewall"
+      POSTGRES_DB: "mobileDeviceWallDB"
+  
+volumes:
+  db_volume:
+    
+#We can populate the database with initial seed data by adding the following in volumes section.
+#volumes:
+# — ./dbscripts/seed.sql :/docker-entrypoint-initdb.d/seed.sql

@@ -19,7 +19,7 @@ namespace device_wall_backend.Data
                 return;   // DB has been seeded
             }
 
-            
+
         }
     }
 }
