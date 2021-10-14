@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using device_wall_backend.Data;
+using device_wall_backend.Gateway;
 
 namespace device_wall_backend
 {

@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using device_wall_backend.Data;
+using device_wall_backend.Gateway;
 using Microsoft.EntityFrameworkCore;
 
 namespace device_wall_backend
