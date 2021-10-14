@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using device_wall_backend.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +20,6 @@ namespace device_wall_backend.Controllers
         public async Task<ActionResult> GetAllLendings()
         {
             return Ok(await _context.Lendings.ToListAsync()) ;
-            
         }
 
         [HttpPost]

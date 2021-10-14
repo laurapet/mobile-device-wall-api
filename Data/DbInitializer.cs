@@ -13,10 +13,10 @@ namespace device_wall_backend.Data
         {
             context.Database.EnsureCreated();
 
-            // Look for any students.
             if (context.Lendings.Any())
             {
-                return;   // DB has been seeded
+                Console.WriteLine("LENDING TABLE EXISTS");
+                return;   
             }
 
 
