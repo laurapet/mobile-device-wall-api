@@ -15,4 +15,34 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Modules.Dashboard\" />
+    <None Remove="Modules.Dashboard\Controllers\" />
+    <None Remove="Modules.Dashboard\Control\" />
+    <None Remove="Modules.Dashboard\Entity\" />
+    <None Remove="Modules.Dashboard\Gateway\" />
+    <None Remove="Modules.Dashboard\Control\DTOs\" />
+    <None Remove="Modules.Devices\" />
+    <None Remove="Modules.Devices\Entity\" />
+    <None Remove="Modules.Lending\" />
+    <None Remove="Modules.Lending\Boundary\" />
+    <None Remove="Modules.Lending\Control\" />
+    <None Remove="Modules.Lending\Entity\" />
+    <None Remove="Modules.Lending\Gateway\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules.Dashboard\" />
+    <Folder Include="Modules.Dashboard\Boundary\" />
+    <Folder Include="Modules.Dashboard\Control\" />
+    <Folder Include="Modules.Dashboard\Entity\" />
+    <Folder Include="Modules.Dashboard\Gateway\" />
+    <Folder Include="Modules.Dashboard\Control\DTOs\" />
+    <Folder Include="Modules.Devices\" />
+    <Folder Include="Modules.Devices\Entity\" />
+    <Folder Include="Modules.Lendings\" />
+    <Folder Include="Modules.Lendings\Boundary\" />
+    <Folder Include="Modules.Lendings\Control\" />
+    <Folder Include="Modules.Lendings\Entity\" />
+    <Folder Include="Modules.Lendings\Gateway\" />
+  </ItemGroup>
 </Project>
