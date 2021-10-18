@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using device_wall_backend.Modules.Dashboard.Gateway;
+using device_wall_backend.Modules.Lendings.Gateway;
 
 namespace device_wall_backend.Data
 {
@@ -16,8 +18,13 @@ namespace device_wall_backend.Data
             if (context.Lendings.Any())
             {
                 Console.WriteLine("LENDING TABLE EXISTS");
-                return;   
             }
+            if (context.Devices.Any())
+            {
+                Console.WriteLine("Device TABLE EXISTS");
+            }
+            
+            
 
 
         }

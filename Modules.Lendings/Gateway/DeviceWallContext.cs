@@ -14,10 +14,12 @@ namespace device_wall_backend.Modules.Lendings.Gateway
         }
 
         public DbSet<Lending> Lendings { get; set; }
+        public DbSet<Device> Devices { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Lending>().ToTable("Lending");
+            modelBuilder.Entity<Device>().ToTable("Device");
         }
     }
 }

@@ -2,6 +2,13 @@
 {
     public class DeviceDashboardDTO
     {
-        
+        public int DeviceID { get; set; }
+        public string Name{ get; set; }
+        public string OperatingSystem{ get; set; }
+        public string Version{ get; set; }
+        public bool IsTablet{ get; set; }
+        public int HorizontalSize{ get; set; }
+        public int VerticalSize{ get; set; }
+        public bool HasSIM{ get; set; }
     }
 }

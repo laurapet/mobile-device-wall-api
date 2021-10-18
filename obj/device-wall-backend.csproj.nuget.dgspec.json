@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/lpeter/device-wall-backend/device-wall-backend.csproj": {}
+    "C:\\Users\\laura\\Documents\\slashwhy\\device-wall-backend.csproj": {}
   },
   "projects": {
-    "/Users/lpeter/device-wall-backend/device-wall-backend.csproj": {
+    "C:\\Users\\laura\\Documents\\slashwhy\\device-wall-backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/lpeter/device-wall-backend/device-wall-backend.csproj",
+        "projectUniqueName": "C:\\Users\\laura\\Documents\\slashwhy\\device-wall-backend.csproj",
         "projectName": "device-wall-backend",
-        "projectPath": "/Users/lpeter/device-wall-backend/device-wall-backend.csproj",
-        "packagesPath": "/Users/lpeter/.nuget/packages/",
-        "outputPath": "/Users/lpeter/device-wall-backend/obj/",
+        "projectPath": "C:\\Users\\laura\\Documents\\slashwhy\\device-wall-backend.csproj",
+        "packagesPath": "C:\\Users\\laura\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\laura\\Documents\\slashwhy\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/lpeter/.config/NuGet/NuGet.Config"
+          "C:\\Users\\laura\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -42,11 +42,17 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.10, )"
+              "version": "[5.0.11, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[5.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.11, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
@@ -75,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.401/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

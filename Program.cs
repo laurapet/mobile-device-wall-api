@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using device_wall_backend.Data;
+using device_wall_backend.Modules.Dashboard.Gateway;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using device_wall_backend.Gateway;
+using device_wall_backend.Modules.Lendings.Gateway;
 
 namespace device_wall_backend
 {
@@ -30,6 +32,7 @@ namespace device_wall_backend
                 try
                 {
                     var context = services.GetRequiredService<DeviceWallContext>();
+                    //var dashboardContext = services.GetRequiredService<DashboardContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
@@ -46,6 +49,10 @@ namespace device_wall_backend
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
                 });
     }
 }

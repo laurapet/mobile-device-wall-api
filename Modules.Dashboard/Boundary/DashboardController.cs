@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using device_wall_backend.Gateway;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using device_wall_backend.Models;
@@ -12,12 +11,10 @@ namespace device_wall_backend.Modules.Dashboard.Boundary
     [Route("[controller]")]
     public class DashboardController : ControllerBase
     {
-        private readonly DashboardContext _context;
         private readonly IDashboardManagement _dashboardManagement;
 
-        public DashboardController(DashboardContext context, IDashboardManagement dashboardManagement)
+        public DashboardController(IDashboardManagement dashboardManagement)
         {
-            _context = context;
             _dashboardManagement = dashboardManagement;
         }
 

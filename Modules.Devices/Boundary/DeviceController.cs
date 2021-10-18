@@ -1,13 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using device_wall_backend.Models;
+using device_wall_backend.Modules.Dashboard.Gateway;
+using device_wall_backend.Modules.Lendings.Gateway;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace device_wall_backend.Modules.Devices.Boundary
 {
-    public class DeviceController : Controller
+    [ApiController]
+    [Route("devices")]
+    public class DeviceController : ControllerBase
     {
-        // GET
-        public IActionResult Index()
+        private readonly DeviceWallContext _context;
+
+        public DeviceController(DeviceWallContext context)
         {
-            return View();
+            _context = context;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Device>> createDevice()
+        {
+            Device d1 = new() {Name = "iPhone 5", OperatingSystem = "iOS", Version = "10.3.4"};
+            Device d2 = new() {Name = "Samsung Galaxy S5",OperatingSystem = "Android", Version = "6.0.1"};
+            _context.Devices.Add(d1);
+            _context.Devices.Add(d2);
+
+            await _context.SaveChangesAsync();
+            return Created("", d1);
         }
     }
 }

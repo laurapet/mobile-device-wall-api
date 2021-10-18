@@ -15,6 +15,7 @@ namespace device_wall_backend.Modules.Dashboard.Control
         public DashboardManagement(IDashboardRepository dashboardRepository)
         {
             _dashboardRepository = dashboardRepository;
+            _converter = new DashboardDTOAdapter();
         }
 
         public async Task<IEnumerable<DeviceDashboardDTO>> getDevicesForDashboard(DeviceFilter filter)
