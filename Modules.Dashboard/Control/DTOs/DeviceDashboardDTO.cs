@@ -10,5 +10,6 @@
         public int HorizontalSize{ get; set; }
         public int VerticalSize{ get; set; }
         public bool HasSIM{ get; set; }
+        public CurrentLendingDTO currentLending { get; set; }
     }
 }

@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using device_wall_backend.Modules.Dashboard.Gateway;
 using device_wall_backend.Modules.Lendings.Gateway;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace device_wall_backend
 {
@@ -38,6 +39,14 @@ namespace device_wall_backend
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "device_wall_backend", Version = "v1" });
             });
+            
+            //to avoid cyclic referencing in Serialization
+            services.AddMvc()
+                .AddNewtonsoftJson(
+                    options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    });
 
             services.AddScoped<IDashboardManagement,DashboardManagement>();
             services.AddScoped<IDashboardRepository,DashboardRepository>();

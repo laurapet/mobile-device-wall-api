@@ -15,18 +15,6 @@ namespace device_wall_backend.Data
         {
             context.Database.EnsureCreated();
 
-            if (context.Lendings.Any())
-            {
-                Console.WriteLine("LENDING TABLE EXISTS");
-            }
-            if (context.Devices.Any())
-            {
-                Console.WriteLine("Device TABLE EXISTS");
-            }
-            
-            
-
-
         }
     }
 }

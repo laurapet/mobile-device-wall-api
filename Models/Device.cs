@@ -17,6 +17,8 @@ namespace device_wall_backend.Models{
         public int Dpi { get; set; }
         public string Port { get; set; }
         public bool HasSIM { get; set; }
+        
+        public Lending currentLending { get; set; }
 
     }
 }

@@ -26,7 +26,7 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         [HttpPost]
         public async Task<ActionResult<Lending>> lendDevice()
         {
-            Lending l = new() { UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device { Name = "d", DeviceID = 1 }, User = new User { Username = "u", UserID = 1 } };
+            Lending l = new() { UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device { Name = "d"}, User = new User { Username = "u"} };
 
             if (_context!=null)
             {

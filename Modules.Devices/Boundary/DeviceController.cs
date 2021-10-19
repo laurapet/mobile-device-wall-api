@@ -3,6 +3,7 @@ using device_wall_backend.Models;
 using device_wall_backend.Modules.Dashboard.Gateway;
 using device_wall_backend.Modules.Lendings.Gateway;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace device_wall_backend.Modules.Devices.Boundary
@@ -18,6 +19,13 @@ namespace device_wall_backend.Modules.Devices.Boundary
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetAllDevices()
+        {
+            return Ok(await _context.Devices.ToListAsync()) ;
+        }
+
+        
         [HttpPost]
         public async Task<ActionResult<Device>> createDevice()
         {

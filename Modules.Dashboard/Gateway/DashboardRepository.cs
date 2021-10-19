@@ -23,15 +23,30 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
         }
         public async Task<IEnumerable<Device>> getDevicesForDashboard(DeviceFilter filter)
         {
-            IQueryable<Device> deviceFilterQuery = _context.Devices.Where(d =>
+            var lendingDevices = _context.Devices.Include(d => d.currentLending).ThenInclude(l=>l.User).ToList();
+            
+            IQueryable<Device> deviceFilterResult = _context.Devices.Where(d =>
                     d.OperatingSystem.Contains(filter.operatingSystem ?? string.Empty) &&
                     d.Version.Contains(filter.version ?? string.Empty));
 
             if (filter.isTablet != null)
             {
-                deviceFilterQuery = deviceFilterQuery.Where(d => d.IsTablet == filter.isTablet);
+                deviceFilterResult = deviceFilterResult.Where(d => d.IsTablet == filter.isTablet);
             }
-            return await deviceFilterQuery.ToListAsync();
+
+            if (filter.isLent != null)
+            {
+                if (filter.isLent==true)
+                {
+                    deviceFilterResult = deviceFilterResult.Where(d => d.currentLending != null);
+                }
+                else
+                {
+                    deviceFilterResult = deviceFilterResult.Where(d => d.currentLending == null);
+                }
+            }
+            return await deviceFilterResult.ToListAsync();
+            //return await deviceFilterQuery.ToListAsync();
         }
     }
 }

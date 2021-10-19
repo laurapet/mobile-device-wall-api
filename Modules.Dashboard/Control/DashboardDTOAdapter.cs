@@ -22,6 +22,15 @@ namespace device_wall_backend.Modules.Dashboard.Control
             dashboardDTO.HorizontalSize = device.HorizontalSize;
             dashboardDTO.VerticalSize = device.VerticalSize;
             dashboardDTO.HasSIM = device.HasSIM;
+
+            if (device.currentLending != null)
+            {
+                dashboardDTO.currentLending = new CurrentLendingDTO()
+                {
+                    LendingID = device.currentLending.DeviceID, Username = device.currentLending.User.Username,
+                    IsLongterm = device.currentLending.IsLongterm
+                };
+            }
             return dashboardDTO;
         }
     }
