@@ -23,6 +23,8 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
         }
         public async Task<IEnumerable<Device>> getDevicesForDashboard(DeviceFilter filter)
         {
+            //Eager loading: When the entity is read, related data is retrieved along with it. This typically results in a single join query that retrieves all of the data that's needed.
+            //You specify eager loading in Entity Framework Core by using the Include and ThenInclude methods.
             var lendingDevices = _context.Devices.Include(d => d.currentLending).ThenInclude(l=>l.User).ToList();
             
             IQueryable<Device> deviceFilterResult = _context.Devices.Where(d =>
