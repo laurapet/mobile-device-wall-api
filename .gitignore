@@ -6,8 +6,11 @@
 *.dll.config
 *.cache
 *.suo
-[Bb]in
+[Bb]in/
 [Oo]bj/
+.idea/
+
+
 
 
 # Include dlls if they’re in the NuGet packages directory
