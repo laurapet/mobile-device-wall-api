@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using device_wall_backend.Modules.Dashboard.Control;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,8 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using device_wall_backend.Gateway;
+using device_wall_backend.Modules.Dashboard.Gateway;
+using device_wall_backend.Modules.Lendings.Gateway;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace device_wall_backend
 {
@@ -30,12 +33,25 @@ namespace device_wall_backend
         {
             services.AddEntityFrameworkNpgsql().AddDbContext<DeviceWallContext>(opt =>
             opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "device_wall_backend", Version = "v1" });
             });
             
+            //to avoid cyclic referencing in Serialization
+            services.AddMvc()
+                .AddNewtonsoftJson(
+                    options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    });
+
+            services.AddScoped<IDashboardManagement,DashboardManagement>();
+            services.AddScoped<IDashboardRepository,DashboardRepository>();
+            services.AddScoped<ILogger,Logger<DashboardRepository>>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

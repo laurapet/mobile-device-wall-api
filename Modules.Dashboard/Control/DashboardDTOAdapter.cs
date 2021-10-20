@@ -16,12 +16,21 @@ namespace device_wall_backend.Modules.Dashboard.Control
 
             dashboardDTO.DeviceID = device.DeviceID;
             dashboardDTO.Name = device.Name;
-            dashboardDTO.OperatingSystem = device.Features.OperatingSystem;
-            dashboardDTO.Version = device.Features.Version;
-            dashboardDTO.IsTablet = device.Features.IsTablet;
-            dashboardDTO.HorizontalSize = device.Features.HorizontalSize;
-            dashboardDTO.VerticalSize = device.Features.VerticalSize;
-            dashboardDTO.HasSIM = device.Features.HasSIM;
+            dashboardDTO.OperatingSystem = device.OperatingSystem;
+            dashboardDTO.Version = device.Version;
+            dashboardDTO.IsTablet = device.IsTablet;
+            dashboardDTO.HorizontalSize = device.HorizontalSize;
+            dashboardDTO.VerticalSize = device.VerticalSize;
+            dashboardDTO.HasSIM = device.HasSIM;
+
+            if (device.currentLending != null)
+            {
+                dashboardDTO.currentLending = new CurrentLendingDTO()
+                {
+                    LendingID = device.currentLending.DeviceID, Username = device.currentLending.User.Username,
+                    IsLongterm = device.currentLending.IsLongterm
+                };
+            }
             return dashboardDTO;
         }
     }

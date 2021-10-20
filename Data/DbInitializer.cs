@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using device_wall_backend.Models;
+using device_wall_backend.Modules.Dashboard.Gateway;
+using device_wall_backend.Modules.Lendings.Gateway;
 
 namespace device_wall_backend.Data
 {
@@ -13,13 +16,41 @@ namespace device_wall_backend.Data
         {
             context.Database.EnsureCreated();
 
-            if (context.Lendings.Any())
+            if (context.Devices.Any())
             {
-                Console.WriteLine("LENDING TABLE EXISTS");
-                return;   
+                return;
             }
 
+            var devices = new Device[]
+            {
+                new Device {Name = "iPhone 5", OperatingSystem = "iOS", Version = "10.3.4"},
+                new Device {Name = "Samsung Galaxy S5", OperatingSystem = "Android", Version = "6.0.1"}
+            };
+            foreach (Device d in devices)
+            {
+                context.Devices.Add(d);
+            }
+            context.SaveChanges();
 
+            var lendings = new Lending[]
+            {
+                new Lending
+                {
+                    UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device {Name = "iPhone 5"},
+                    User = new User {Username = "u1"}
+                },
+                new Lending
+                {
+                    UserID = 2, DeviceID = 2, IsLongterm = true, Device = new Device {Name = "Samsung Galaxy S5"},
+                    User = new User {Username = "u2"}
+                },
+            };
+            
+            foreach (Lending l in lendings)
+            {
+                context.Lendings.Add(l);
+            }
+            context.SaveChanges();
         }
     }
 }

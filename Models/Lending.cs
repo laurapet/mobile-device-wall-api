@@ -1,11 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace device_wall_backend.Models{
     public class Lending{
-        public int LendingID{get;set;}
-        public int UserID{get; set;}
+        [Key]
         public int DeviceID{get; set;}
-        public bool IsLongterm;
+        public int UserID{get; set;}
+        
+        
+        public bool IsLongterm{get; set;}
 
-        public User User;
-        public Device Device;
+        public User User{get; set;}
+        public Device Device{get; set;}
     }
 }

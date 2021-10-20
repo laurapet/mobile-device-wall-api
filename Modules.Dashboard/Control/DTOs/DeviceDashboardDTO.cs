@@ -1,20 +1,15 @@
-﻿using System;
-namespace device_wall_backend.Modules.Dashboard.Control.DTOs
+﻿namespace device_wall_backend.Modules.Dashboard.Control.DTOs
 {
     public class DeviceDashboardDTO
     {
-        public int DeviceID;
-        public string Name;
-        public string OperatingSystem;
-        public string Version;
-        public bool IsTablet;
-        public int HorizontalSize;
-        public int VerticalSize;
-        public bool HasSIM;
-        public CurrentLendDTO CurrentLendDTO;
-
-        public DeviceDashboardDTO()
-        {
-        }
+        public int DeviceID { get; set; }
+        public string Name{ get; set; }
+        public string OperatingSystem{ get; set; }
+        public string Version{ get; set; }
+        public bool IsTablet{ get; set; }
+        public int HorizontalSize{ get; set; }
+        public int VerticalSize{ get; set; }
+        public bool HasSIM{ get; set; }
+        public CurrentLendingDTO currentLending { get; set; }
     }
 }
