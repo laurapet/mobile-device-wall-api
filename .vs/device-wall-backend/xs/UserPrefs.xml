@@ -1,0 +1,58 @@
+﻿<Properties StartupConfiguration="{961D053F-F757-4078-AB03-921533814AA2}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
+    <Files>
+      <File FileName="Modules.Devices/Entity/Device.cs" Line="11" Column="1" />
+      <File FileName="Modules.Dashboard/Control/DashboardManagement.cs" Line="22" Column="61" />
+      <File FileName="Modules.Dashboard/Gateway/IDashboardRepository.cs" Line="5" Column="33" />
+      <File FileName="Modules.Dashboard/Gateway/DashboardRepository.cs" Line="6" Column="34" />
+      <File FileName="Modules.Dashboard/Gateway/DashboardContext.cs" Line="2" Column="33" />
+      <File FileName="Modules.Dashboard/Control/IDashboardManagement.cs" Line="10" Column="54" />
+      <File FileName="Modules.Dashboard/Boundary/DashboardController.cs" Line="26" Column="10" />
+      <File FileName="Startup.cs" Line="28" Column="71" />
+      <File FileName="Modules.Lending/Boundary/LendingController.cs" Line="43" Column="1" />
+      <File FileName="Gateway/DbInitializer.cs" Line="13" Column="51" />
+      <File FileName="Gateway/DeviceWallContext.cs" Line="15" Column="1" />
+      <File FileName=".dockerignore" Line="1" Column="1" />
+      <File FileName="Modules.Dashboard/Control/DeviceFilter.cs" Line="1" Column="1" />
+      <File FileName="Modules.Dashboard/Control/DTOs/CurrentLendDTO.cs" Line="1" Column="1" />
+      <File FileName="Modules.Dashboard/Control/DTOs/DeviceDashboardDTO.cs" Line="1" Column="1" />
+      <File FileName="Models/Device.cs" Line="6" Column="1" />
+      <File FileName="Migrations/DeviceWallContextModelSnapshot.cs" Line="11" Column="36" />
+      <File FileName="Migrations/20211012083715_InitialCreate.Designer.cs" Line="12" Column="32" />
+      <File FileName="Migrations/20211012083715_InitialCreate.cs" Line="1" Column="1" />
+      <File FileName="Program.cs" Line="29" Column="14" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="device-wall-backend" expanded="True">
+            <Node name="device-wall-backend" expanded="True">
+              <Node name="Gateway" expanded="True" />
+              <Node name="Migrations" expanded="True">
+                <Node name="20211012083715_InitialCreate.cs" expanded="True" />
+              </Node>
+              <Node name="Models" expanded="True">
+                <Node name="Features.cs" selected="True" />
+              </Node>
+              <Node name="Modules.Dashboard" expanded="True">
+                <Node name="Boundary" expanded="True" />
+                <Node name="Control" expanded="True">
+                  <Node name="DTOs" expanded="True" />
+                </Node>
+                <Node name="Gateway" expanded="True" />
+              </Node>
+              <Node name="Modules.Devices" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.device-wall-backend PreferredExecutionTarget="/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
