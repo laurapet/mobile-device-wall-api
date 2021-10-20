@@ -14,7 +14,7 @@
         "outputPath": "/Users/lpeter/device-wall-backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/lpeter/.config/NuGet/NuGet.Config"
+          "/Users/lpeter/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"

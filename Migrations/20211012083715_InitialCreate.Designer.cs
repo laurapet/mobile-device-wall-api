@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using device_wall_backend.Gateway;
+//using device_wall_backend.Gateway;
 using device_wall_backend.Modules.Lendings.Gateway;
 
 namespace device_wall_backend.Migrations
