@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using device_wall_backend.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace device_wall_backend.Modules.Lendings.Gateway
+namespace device_wall_backend.Data
 {
     public class DeviceWallContext : DbContext{
 
