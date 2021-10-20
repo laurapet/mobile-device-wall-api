@@ -2,7 +2,7 @@
 {
     public class DeviceDashboardDTO
     {
-        public int DeviceID { get; set; }
+        //public int DeviceID { get; set; }
         public string Name{ get; set; }
         public string OperatingSystem{ get; set; }
         public string Version{ get; set; }
@@ -11,5 +11,7 @@
         public int VerticalSize{ get; set; }
         public bool HasSIM{ get; set; }
         public CurrentLendingDTO currentLending { get; set; }
+        
+        public string LinkToDetails { get; set; }
     }
 }

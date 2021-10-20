@@ -46,6 +46,7 @@
     <Folder Include="Modules.Lendings\" />
     <Folder Include="Modules.Lendings\Boundary\" />
     <Folder Include="Modules.Lendings\Control\" />
+    <Folder Include="Modules.Lendings\Gateway" />
     <Folder Include="Modules.Lendings\Gateway\" />
   </ItemGroup>
   <ItemGroup>

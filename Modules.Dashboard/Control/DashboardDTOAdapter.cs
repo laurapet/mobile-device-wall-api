@@ -14,7 +14,7 @@ namespace device_wall_backend.Modules.Dashboard.Control
         {
             DeviceDashboardDTO dashboardDTO = new DeviceDashboardDTO();
 
-            dashboardDTO.DeviceID = device.DeviceID;
+            //dashboardDTO.DeviceID = device.DeviceID;
             dashboardDTO.Name = device.Name;
             dashboardDTO.OperatingSystem = device.OperatingSystem;
             dashboardDTO.Version = device.Version;
@@ -31,6 +31,8 @@ namespace device_wall_backend.Modules.Dashboard.Control
                     IsLongterm = device.currentLending.IsLongterm
                 };
             }
+
+            dashboardDTO.LinkToDetails = "/dashboard/" + device.DeviceID;
             return dashboardDTO;
         }
     }

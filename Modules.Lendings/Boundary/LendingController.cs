@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using device_wall_backend.Modules.Lendings.Gateway;
+using device_wall_backend.Data;
 using device_wall_backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

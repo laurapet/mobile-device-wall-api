@@ -2,7 +2,6 @@
 using System.Linq;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Dashboard.Gateway;
-using device_wall_backend.Modules.Lendings.Gateway;
 
 namespace device_wall_backend.Data
 {

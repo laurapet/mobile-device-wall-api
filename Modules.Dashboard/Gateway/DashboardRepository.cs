@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using device_wall_backend.Data;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Dashboard.Control;
-using device_wall_backend.Modules.Lendings.Gateway;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

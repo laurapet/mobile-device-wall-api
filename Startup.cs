@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using device_wall_backend.Data;
 using device_wall_backend.Modules.Dashboard.Control;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +14,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using device_wall_backend.Modules.Dashboard.Gateway;
-using device_wall_backend.Modules.Lendings.Gateway;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
