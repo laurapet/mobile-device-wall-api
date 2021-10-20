@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using device_wall_backend.Modules.Devices.Entity;
 
 namespace device_wall_backend.Models{
@@ -18,6 +20,8 @@ namespace device_wall_backend.Models{
         public string Port { get; set; }
         public bool HasSIM { get; set; }
         
+        public List<String> ExceptionalCases { get; set; }
+
         public Lending currentLending { get; set; }
 
     }

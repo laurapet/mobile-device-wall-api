@@ -23,6 +23,14 @@ namespace device_wall_backend.Modules.Dashboard.Boundary
         {
             return Ok(await _dashboardManagement.getDevicesForDashboard(filter)) ;
         }
+        
+        [HttpGet("{deviceID}")]
+        public async Task<ActionResult<Device>> GetDeviceDetails(int deviceID)
+        {
+            return Ok(await _dashboardManagement.getDeviceDetails(deviceID)) ;
+        }
+        
+        
 
         /*[HttpPost]
         public async Task<ActionResult<Lending>> lendDevice()

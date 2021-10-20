@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using device_wall_backend.Modules.Dashboard.Control.DTOs;
 using device_wall_backend.Modules.Dashboard.Gateway;
 using device_wall_backend.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace device_wall_backend.Modules.Dashboard.Control
 {
@@ -29,6 +30,13 @@ namespace device_wall_backend.Modules.Dashboard.Control
 
             return deviceDashboardDTOs;
 
+        }
+
+        public Task<ActionResult<Device>> getDeviceDetails(int deviceID)
+        {
+            var device = _dashboardRepository.getDeviceDetails(deviceID);
+            //TODO: vielleicht zum DTO konvertieren (bisher unterscheiden sich Device & DetailsDTO nicht)
+            return device;
         }
     }
 }

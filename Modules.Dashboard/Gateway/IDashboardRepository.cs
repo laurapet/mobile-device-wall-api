@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Dashboard.Control;
 using device_wall_backend.Modules.Dashboard.Control.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace device_wall_backend.Modules.Dashboard.Gateway
 {
@@ -11,5 +12,6 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
     {
         public Task<IEnumerable<Device>> getDevicesForDashboard(DeviceFilter filter);
 
+        public Task<ActionResult<Device>> getDeviceDetails(int deviceId);
     }
 }

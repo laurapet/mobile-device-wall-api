@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Dashboard.Control;
-using device_wall_backend.Modules.Dashboard.Control.DTOs;
 using device_wall_backend.Modules.Lendings.Gateway;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -50,6 +49,16 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
             }
             return await deviceFilterResult.ToListAsync();
             //return await deviceFilterQuery.ToListAsync();
+        }
+
+        public async Task<ActionResult<Device>> getDeviceDetails(int deviceId)
+        {
+            var device = await _context.Devices.FindAsync(deviceId);
+            if (device == null)
+            {
+                return new NotFoundResult();
+            }
+            return device;
         }
     }
 }
