@@ -2,7 +2,7 @@
 {
     public class DeviceDashboardDTO
     {
-        //public int DeviceID { get; set; }
+        public int DeviceID { get; set; }
         public string Name{ get; set; }
         public string OperatingSystem{ get; set; }
         public string Version{ get; set; }

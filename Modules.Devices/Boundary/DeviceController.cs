@@ -37,5 +37,12 @@ namespace device_wall_backend.Modules.Devices.Boundary
             await _context.SaveChangesAsync();
             return Created("", d1);
         }
+
+        /*[HttpPut("{deviceID}")]
+        public async Task<ActionResult> updateDevice(int deviceID)
+        {
+            var device = await _context.Devices.FindAsync(deviceID);
+            
+        }*/
     }
 }
