@@ -19,22 +19,22 @@ namespace device_wall_backend.Modules.Dashboard.Control
             _converter = new DashboardDTOAdapter();
         }
 
-        public async Task<IEnumerable<DeviceDashboardDTO>> getDevicesForDashboard(DeviceFilter filter)
+        public async Task<IEnumerable<DeviceDashboardDTO>> GetDevicesForDashboard(DeviceFilter filter)
         {
-            var devices = await _dashboardRepository.getDevicesForDashboard(filter);
+            var devices = await _dashboardRepository.GetDevicesForDashboard(filter);
             List<DeviceDashboardDTO> deviceDashboardDTOs = new List<DeviceDashboardDTO>();
             foreach(Device d in devices)
             {
-                deviceDashboardDTOs.Add(_converter.convertDeviceToDashboardDTO(d));
+                deviceDashboardDTOs.Add(_converter.ConvertDeviceToDashboardDTO(d));
             }
 
             return deviceDashboardDTOs;
 
         }
 
-        public Task<ActionResult<Device>> getDeviceDetails(int deviceID)
+        public Task<ActionResult<Device>> GetDeviceDetails(int deviceID)
         {
-            var device = _dashboardRepository.getDeviceDetails(deviceID);
+            var device = _dashboardRepository.GetDeviceDetails(deviceID);
             //TODO: vielleicht zum DTO konvertieren (bisher unterscheiden sich Device & DetailsDTO nicht)
             return device;
         }

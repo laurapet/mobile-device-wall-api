@@ -10,7 +10,7 @@ namespace device_wall_backend.Modules.Dashboard.Control
         {
         }
 
-        public DeviceDashboardDTO convertDeviceToDashboardDTO(Device device)
+        public DeviceDashboardDTO ConvertDeviceToDashboardDTO(Device device)
         {
             DeviceDashboardDTO dashboardDTO = new DeviceDashboardDTO();
 
@@ -23,12 +23,12 @@ namespace device_wall_backend.Modules.Dashboard.Control
             dashboardDTO.VerticalSize = device.VerticalSize;
             dashboardDTO.HasSIM = device.HasSIM;
 
-            if (device.currentLending != null)
+            if (device.CurrentLending != null)
             {
                 dashboardDTO.currentLending = new CurrentLendingDTO()
                 {
-                    LendingID = device.currentLending.DeviceID, Username = device.currentLending.User.Username,
-                    IsLongterm = device.currentLending.IsLongterm
+                    LendingID = device.CurrentLending.DeviceID, Username = device.CurrentLending.User.Username,
+                    IsLongterm = device.CurrentLending.IsLongterm
                 };
             }
 

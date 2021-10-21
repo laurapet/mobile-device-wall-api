@@ -1,9 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Dashboard.Control;
-using device_wall_backend.Modules.Dashboard.Gateway;
 
 namespace device_wall_backend.Modules.Dashboard.Boundary
 {
@@ -21,17 +19,15 @@ namespace device_wall_backend.Modules.Dashboard.Boundary
         [HttpGet]
         public async Task<ActionResult> GetAllDevices([FromQuery]DeviceFilter filter)
         {
-            return Ok(await _dashboardManagement.getDevicesForDashboard(filter)) ;
+            return Ok(await _dashboardManagement.GetDevicesForDashboard(filter)) ;
         }
         
         [HttpGet("{deviceID}")]
         public async Task<ActionResult<Device>> GetDeviceDetails(int deviceID)
         {
-            return Ok(await _dashboardManagement.getDeviceDetails(deviceID)) ;
+            return Ok(await _dashboardManagement.GetDeviceDetails(deviceID)) ;
         }
         
-        
-
         /*[HttpPost]
         public async Task<ActionResult<Lending>> lendDevice()
         {

@@ -20,38 +20,31 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
             _context = context;
             _logger = logger;
         }
-        public async Task<IEnumerable<Device>> getDevicesForDashboard(DeviceFilter filter)
+        
+        public async Task<IEnumerable<Device>> GetDevicesForDashboard(DeviceFilter filter)
         {
             //Eager loading: When the entity is read, related data is retrieved along with it. This typically results in a single join query that retrieves all of the data that's needed.
             //You specify eager loading in Entity Framework Core by using the Include and ThenInclude methods.
-            var lendingDevices = _context.Devices.Include(d => d.currentLending).ThenInclude(l=>l.User);
-            
-            
-            var deviceFilterResult = lendingDevices.Where(d =>
-                    d.OperatingSystem.Contains(filter.operatingSystem ?? string.Empty) &&
-                    d.Version.Contains(filter.version ?? string.Empty));
+            var lendingDevices = _context.Devices.Include(device => device.CurrentLending).ThenInclude(lending => lending.User);
+            var deviceFilterResult = lendingDevices.Where(device =>
+                    device.OperatingSystem.Contains(filter.OperatingSystem ?? string.Empty) &&
+                    device.Version.Contains(filter.Version ?? string.Empty));
 
-            if (filter.isTablet != null)
+            if (filter.IsTablet != null)
             {
-                deviceFilterResult = deviceFilterResult.Where(d => d.IsTablet == filter.isTablet);
+                deviceFilterResult = deviceFilterResult.Where(device => device.IsTablet == filter.IsTablet);
             }
 
-            if (filter.isLent != null)
+            if (filter.IsLent != null)
             {
-                if (filter.isLent==true)
-                {
-                    deviceFilterResult = deviceFilterResult.Where(d => d.currentLending != null);
-                }
-                else
-                {
-                    deviceFilterResult = deviceFilterResult.Where(d => d.currentLending == null);
-                }
+                bool filterIsLent = filter.IsLent.Value; //to make bool not nullable, so ternary expression works
+                deviceFilterResult = deviceFilterResult.Where(device => filterIsLent ? device.CurrentLending != null : device.CurrentLending == null);
             }
-            return await deviceFilterResult.ToListAsync();
-            //return await deviceFilterQuery.ToListAsync();
+            
+            return await deviceFilterResult.ToListAsync(); 
         }
 
-        public async Task<ActionResult<Device>> getDeviceDetails(int deviceId)
+        public async Task<ActionResult<Device>> GetDeviceDetails(int deviceId)
         {
             var device = await _context.Devices.FindAsync(deviceId);
             if (device == null)

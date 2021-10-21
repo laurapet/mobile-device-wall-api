@@ -51,7 +51,6 @@ namespace device_wall_backend
             services.AddScoped<IDashboardManagement,DashboardManagement>();
             services.AddScoped<IDashboardRepository,DashboardRepository>();
             services.AddScoped<ILogger,Logger<DashboardRepository>>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

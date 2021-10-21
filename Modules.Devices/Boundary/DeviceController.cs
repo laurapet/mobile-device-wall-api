@@ -24,7 +24,6 @@ namespace device_wall_backend.Modules.Devices.Boundary
         {
             return Ok(await _context.Devices.ToListAsync()) ;
         }
-
         
         [HttpPost]
         public async Task<ActionResult<Device>> createDevice()

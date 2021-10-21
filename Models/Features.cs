@@ -18,7 +18,7 @@ namespace device_wall_backend.Modules.Devices.Entity
         public int Dpi { get; set; }
         public string Port { get; set; }
         public bool HasSIM { get; set; }
-        public List<string> exceptionalCases { get; set; }
+        public List<string> ExceptionalCases { get; set; }
         
     }
 }

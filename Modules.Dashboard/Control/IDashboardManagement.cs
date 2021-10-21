@@ -9,8 +9,8 @@ namespace device_wall_backend.Modules.Dashboard.Control
 {
     public interface IDashboardManagement
     {
-        public Task<IEnumerable<DeviceDashboardDTO>> getDevicesForDashboard(DeviceFilter filter);
+        public Task<IEnumerable<DeviceDashboardDTO>> GetDevicesForDashboard(DeviceFilter filter);
 
-        public Task<ActionResult<Device>> getDeviceDetails(int deviceID);
+        public Task<ActionResult<Device>> GetDeviceDetails(int deviceID);
     }
 }

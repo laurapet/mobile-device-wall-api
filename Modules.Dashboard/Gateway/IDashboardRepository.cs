@@ -10,8 +10,8 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
 {
     public interface IDashboardRepository
     {
-        public Task<IEnumerable<Device>> getDevicesForDashboard(DeviceFilter filter);
+        public Task<IEnumerable<Device>> GetDevicesForDashboard(DeviceFilter filter);
 
-        public Task<ActionResult<Device>> getDeviceDetails(int deviceId);
+        public Task<ActionResult<Device>> GetDeviceDetails(int deviceId);
     }
 }

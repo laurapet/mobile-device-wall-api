@@ -31,7 +31,6 @@ namespace device_wall_backend
                 try
                 {
                     var context = services.GetRequiredService<DeviceWallContext>();
-                    //var dashboardContext = services.GetRequiredService<DashboardContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
@@ -48,7 +47,8 @@ namespace device_wall_backend
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                }).ConfigureLogging(logging =>
+                })
+                .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
                     logging.AddConsole();
