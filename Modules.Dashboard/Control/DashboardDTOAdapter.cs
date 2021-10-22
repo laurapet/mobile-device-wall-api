@@ -10,18 +10,29 @@ namespace device_wall_backend.Modules.Dashboard.Control
         {
         }
 
-        public DeviceDashboardDTO convertDeviceToDashboardDTO(Device device)
+        public DeviceDashboardDTO ConvertDeviceToDashboardDTO(Device device)
         {
             DeviceDashboardDTO dashboardDTO = new DeviceDashboardDTO();
 
             dashboardDTO.DeviceID = device.DeviceID;
             dashboardDTO.Name = device.Name;
-            dashboardDTO.OperatingSystem = device.Features.OperatingSystem;
-            dashboardDTO.Version = device.Features.Version;
-            dashboardDTO.IsTablet = device.Features.IsTablet;
-            dashboardDTO.HorizontalSize = device.Features.HorizontalSize;
-            dashboardDTO.VerticalSize = device.Features.VerticalSize;
-            dashboardDTO.HasSIM = device.Features.HasSIM;
+            dashboardDTO.OperatingSystem = device.OperatingSystem;
+            dashboardDTO.Version = device.Version;
+            dashboardDTO.IsTablet = device.IsTablet;
+            dashboardDTO.HorizontalSize = device.HorizontalSize;
+            dashboardDTO.VerticalSize = device.VerticalSize;
+            dashboardDTO.HasSIM = device.HasSIM;
+
+            if (device.CurrentLending != null)
+            {
+                dashboardDTO.currentLending = new CurrentLendingDTO()
+                {
+                    LendingID = device.CurrentLending.DeviceID, Username = device.CurrentLending.User.Username,
+                    IsLongterm = device.CurrentLending.IsLongterm
+                };
+            }
+
+            dashboardDTO.LinkToDetails = "/dashboard/" + device.DeviceID;
             return dashboardDTO;
         }
     }

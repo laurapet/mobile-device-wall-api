@@ -3,10 +3,10 @@ namespace device_wall_backend.Modules.Dashboard.Control
 {
     public class DeviceFilter
     {
-        public string? operatingSystem { get; set; }
-        public string? version { get; set; }
-        public bool? isTablet { get; set; }
-        public bool? isLent { get; set; }
+        public string? OperatingSystem { get; set; }
+        public string? Version { get; set; }
+        public bool? IsTablet { get; set; }
+        public bool? IsLent { get; set; }
 
     }
 }

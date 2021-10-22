@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using device_wall_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace device_wall_backend.Data
@@ -10,14 +7,15 @@ namespace device_wall_backend.Data
 
         public DeviceWallContext(DbContextOptions<DeviceWallContext> options) : base(options)
         {
-            Console.WriteLine("context ctor");
         }
 
         public DbSet<Lending> Lendings { get; set; }
+        public DbSet<Device> Devices { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Lending>().ToTable("Lending");
+            modelBuilder.Entity<Device>().ToTable("Device");
         }
     }
 }

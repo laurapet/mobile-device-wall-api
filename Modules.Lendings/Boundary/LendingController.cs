@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
-using device_wall_backend.Gateway;
+using device_wall_backend.Data;
+using device_wall_backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using device_wall_backend.Models;
 
-
-namespace device_wall_backend.Controllers
+namespace device_wall_backend.Modules.Lendings.Boundary
 {
     [ApiController]
     [Route("lendings")]
@@ -25,9 +24,9 @@ namespace device_wall_backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Lending>> lendDevice()
+        public async Task<ActionResult<Lending>> LendDevice()
         {
-            Lending l = new() { UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device { Name = "d", DeviceID = 1 }, User = new User { Username = "u", UserID = 1 } };
+            Lending l = new() { UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device { Name = "d"}, User = new User { Username = "u"} };
 
             if (_context!=null)
             {

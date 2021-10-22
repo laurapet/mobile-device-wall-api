@@ -6,8 +6,12 @@
 *.dll.config
 *.cache
 *.suo
-[Bb]in
+[Bb]in/
 [Oo]bj/
+.idea/
+.vs/
+
+
 
 
 # Include dlls if they’re in the NuGet packages directory
@@ -15,6 +19,11 @@
 !/packages/*/lib/*/*.dll
 # Include dlls if they're in the CommonReferences directory
 !*CommonReferences/*.dll
+Migrations/DeviceWall/20211020061456_UpdatedLendingsAnDevices.cs
+Migrations/DeviceWall/20211020061456_UpdatedLendingsAnDevices.Designer.cs
+Migrations/DeviceWall/20211020071353_DeviceWallNewContext.cs
+Migrations/DeviceWall/20211020071353_DeviceWallNewContext.Designer.cs
+
 .idea/.idea.slashwhy.dir/.idea/workspace.xml
 .vs/slnx.sqlite
 .vs/VSWorkspaceState.json

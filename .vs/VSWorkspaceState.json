@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Controllers",
+    "\\Gateway",
+    "\\Migrations",
+    "\\Models",
+    "\\Modules.Dashboard",
+    "\\Modules.Dashboard\\Control",
+    "\\Modules.Dashboard\\Gateway",
+    "\\Modules.Lendings",
+    "\\Modules.Lendings\\Gateway"
+  ],
+  "SelectedNode": "\\Modules.Dashboard\\Gateway\\IDashboardRepository.cs",
+  "PreviewInSolutionExplorer": false
+}
