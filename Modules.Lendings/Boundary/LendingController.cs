@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using device_wall_backend.Data;
 using device_wall_backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace device_wall_backend.Modules.Lendings.Boundary
 {
+    //TODO: getOwnLendings, changeUserIDinLending, search 
     [ApiController]
     [Route("lendings")]
     public class LendingController : ControllerBase
@@ -23,8 +25,9 @@ namespace device_wall_backend.Modules.Lendings.Boundary
             return Ok(await _context.Lendings.ToListAsync()) ;
         }
 
+        //TODO: UserID mit übergeben & überprüfen
         [HttpPost]
-        public async Task<ActionResult<Lending>> LendDevice()
+        public async Task<ActionResult<Lending>> LendDevice([FromBody]List<int> deviceIDs)
         {
             Lending l = new() { UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device { Name = "d"}, User = new User { Username = "u"} };
 
