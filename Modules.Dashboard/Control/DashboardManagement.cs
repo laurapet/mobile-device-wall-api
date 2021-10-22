@@ -29,7 +29,6 @@ namespace device_wall_backend.Modules.Dashboard.Control
             }
 
             return deviceDashboardDTOs;
-
         }
 
         public Task<ActionResult<Device>> GetDeviceDetails(int deviceID)
