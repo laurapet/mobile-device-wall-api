@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>device_wall_backend</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,6 +50,7 @@
     <Folder Include="Modules.Lendings\" />
     <Folder Include="Modules.Lendings\Boundary\" />
     <Folder Include="Modules.Lendings\Control\" />
+    <Folder Include="obj\Debug\net5.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Modules.Dashboard\Gateway\DashboardContext.cs" />

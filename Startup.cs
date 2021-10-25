@@ -14,6 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using device_wall_backend.Modules.Dashboard.Gateway;
+using device_wall_backend.Modules.Lendings.Control;
+using device_wall_backend.Modules.Lendings.Gateway;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -47,7 +49,10 @@ namespace device_wall_backend
                     {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
-
+            
+            
+            services.AddScoped<ILendingManagement,LendingManagement>();
+            services.AddScoped<ILendingRepository,LendingRepository>();
             services.AddScoped<IDashboardManagement,DashboardManagement>();
             services.AddScoped<IDashboardRepository,DashboardRepository>();
             services.AddScoped<ILogger,Logger<DashboardRepository>>();

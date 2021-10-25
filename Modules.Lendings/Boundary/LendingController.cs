@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using device_wall_backend.Data;
 using device_wall_backend.Models;
+using device_wall_backend.Modules.Lendings.Control;
+using device_wall_backend.Modules.Lendings.Control.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +15,12 @@ namespace device_wall_backend.Modules.Lendings.Boundary
     public class LendingController : ControllerBase
     {
         private readonly DeviceWallContext _context;
+        private readonly ILendingManagement _lendingManagement;
 
-        public LendingController(DeviceWallContext context)
+        public LendingController(DeviceWallContext context, ILendingManagement lendingManagement)
         {
             _context = context;
+            _lendingManagement = lendingManagement;
         }
 
         [HttpGet]
@@ -24,19 +30,16 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         }
 
         [HttpPost]
-        public async Task<ActionResult<Lending>> LendDevice()
+        public async Task<IEnumerable<ActionResult<Lending>>> LendDevice([FromBody]List<LendingListDTO> lendingList, int userID)
         {
-            Lending l = new() { UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device { Name = "d"}, User = new User { Username = "u"} };
-
-            if (_context!=null)
+            List <ActionResult<Lending>> lendingResults = new List<ActionResult<Lending>>();
+            foreach (var lendingDTO in lendingList)
             {
-                _context.Lendings.Add(l);
+                LendingDTO l = new LendingDTO(){DeviceID = lendingDTO.DeviceID, UserID = userID, IsLongterm = lendingDTO.IsLongterm};
+                lendingResults.Add(await _lendingManagement.LendDevice(l, userID));
             }
-            
-            await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            return Created("",l);
+            return lendingResults;
         }
     }
 }
