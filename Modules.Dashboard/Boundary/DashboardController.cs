@@ -25,7 +25,7 @@ namespace device_wall_backend.Modules.Dashboard.Boundary
         [HttpGet("{deviceID}")]
         public async Task<ActionResult<Device>> GetDeviceDetails(int deviceID)
         {
-            return Ok(await _dashboardManagement.GetDeviceDetails(deviceID)) ;
+            return await _dashboardManagement.GetDeviceDetails(deviceID);
         }
         
         /*[HttpPost]
