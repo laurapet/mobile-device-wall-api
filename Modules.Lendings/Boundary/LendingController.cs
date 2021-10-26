@@ -23,10 +23,19 @@ namespace device_wall_backend.Modules.Lendings.Boundary
             _lendingManagement = lendingManagement;
         }
 
+        //TODO: Admin-Beschränkung?
         [HttpGet]
         public async Task<ActionResult> GetAllLendings()
         {
             return Ok(await _context.Lendings.ToListAsync()) ;
+        }
+
+        //TODO: wenn OAuth eingebunden ist, userID aus securitykontext holen?
+        [HttpGet("{userID}")]
+        public async Task<ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(int userID)
+        {
+            //falls im securitycontext keine userID/Token gesetzt ist 403
+            return Ok(await _lendingManagement.GetOwnDevices(userID));
         }
 
         [HttpPost]
@@ -38,8 +47,13 @@ namespace device_wall_backend.Modules.Lendings.Boundary
                 LendingDTO l = new LendingDTO(){DeviceID = lendingDTO.DeviceID, UserID = userID, IsLongterm = lendingDTO.IsLongterm};
                 lendingResults.Add(await _lendingManagement.LendDevice(l, userID));
             }
-
             return lendingResults;
+        }
+
+        [HttpPut("{lendingID}")]
+        public async Task<ActionResult> ChangeUserOfLending(int lendingID, int currentUserID, int newUserID)
+        {
+            return await _lendingManagement.ChangeUserOfLending(lendingID, currentUserID, newUserID);
         }
     }
 }

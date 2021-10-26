@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Lendings.Control.DTOs;
@@ -8,5 +9,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
     public interface ILendingRepository
     {
         public Task<ActionResult<Lending>> CreateLending(LendingDTO lendingDto, int userID);
+        public Task<IEnumerable<Lending>> GetOwnLendings(int userId);
+        public Task<ActionResult> UpdateUserOfLending(int LendingID, int CurrentUserID, int NewUserID);
     }
 }
