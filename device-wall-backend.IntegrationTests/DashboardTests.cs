@@ -29,6 +29,7 @@ namespace device_wall_backend.IntegrationTests
         }
 
         [Fact]
+        //testen ob request müll ist
         public async Task GET_DeviceDetails_NotFound()
         {
             // Act
@@ -47,7 +48,7 @@ namespace device_wall_backend.IntegrationTests
             // Act
             var response = await TestClient.GetAsync($"Dashboard?operatingSystem={operatingSystem}");
             var deviceResults = JsonConvert.DeserializeObject<Device[]>(await response.Content.ReadAsStringAsync());
-            // Assert
+            // Assert (nicht empty prüfen)
             foreach (Device device in deviceResults)
             {
                 device.OperatingSystem.Should().Be(operatingSystem);
