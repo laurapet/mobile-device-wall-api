@@ -36,7 +36,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             };
 
             _context.Lendings.Add(lendingToCreate);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return lendingToCreate;
         }
     }
