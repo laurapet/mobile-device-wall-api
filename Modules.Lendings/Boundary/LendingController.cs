@@ -35,7 +35,7 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         public async Task<ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(int userID)
         {
             //falls im securitycontext keine userID/Token gesetzt ist 403
-            return Ok(await _lendingManagement.GetOwnDevices(userID));
+            return Ok(await _lendingManagement.GetOwnLendings(userID));
         }
 
         [HttpPost]

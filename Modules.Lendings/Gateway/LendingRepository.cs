@@ -18,24 +18,26 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             _context = context;
         }
 
-        public async Task<ActionResult<Lending>> CreateLending(LendingDTO lendingDto, int UserID)
+        //TODO: ausprobieren
+        public async Task<ActionResult<Lending>> CreateLending(LendingDTO lendingDto, int userId)
         {
-            Device deviceToLend = await _context.Devices.FindAsync(lendingDto.DeviceID);
+            var deviceToLend = await _context.Devices.FindAsync(lendingDto.DeviceID);
             if (deviceToLend == null)
             {
                 return new NotFoundResult();
             }
+            
             _context.Entry(deviceToLend).Reference(d => d.CurrentLending).Load();
             if (deviceToLend.CurrentLending != null)
             {
                 return new BadRequestResult();
             }
-            
-            //TODO: User finden
-            Lending lendingToCreate = new Lending()
+
+            var user = await _context.Users.FindAsync(userId);
+            var lendingToCreate = new Lending()
             {
                 Device = deviceToLend, DeviceID = deviceToLend.DeviceID,
-                User = new User() {Username = "u3"}, UserID = 3, IsLongterm = lendingDto.IsLongterm// wird noch durch was nicht hardgecodedetes ersetzt
+                User = user
             };
 
             _context.Lendings.Add(lendingToCreate);
@@ -50,17 +52,36 @@ namespace device_wall_backend.Modules.Lendings.Gateway
 
         public async Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, int newUserId)
         {
-            //TODO: Include UserTable? gucken, ob user berechtigter user ist & ob es newUser überhaupt gibt?
             var lending = await _context.Lendings.FindAsync(lendingId);
+            var newUser = await _context.Users.FindAsync(newUserId);
+            if (lending == null || newUser == null)
+            {
+                return new NotFoundResult();
+            }
+            
+            if (lending.UserID != currentUserId)//Or not Admin?
+            {
+                return new StatusCodeResult(403);// 'new ForbidResult()' requires Authenticationscheme
+            }
+            
+            lending.UserID = newUserId;
+            _context.Entry(lending).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            
+            return new NoContentResult();
+        }
+
+        public async Task<ActionResult> DeleteLending(int lendingID, int currentUserID)
+        {
+            var lending = await _context.Lendings.FindAsync(lendingID);
             if (lending == null)
             {
                 return new NotFoundResult();
             }
 
-            lending.UserID = newUserId;
-            _context.Entry(lending).State = EntityState.Modified;
+            _context.Lendings.Remove(lending);
             await _context.SaveChangesAsync();
-            
+
             return new NoContentResult();
         }
     }

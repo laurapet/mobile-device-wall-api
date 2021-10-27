@@ -20,15 +20,13 @@ namespace device_wall_backend.Modules.Lendings.Control
         }
         
         //TODO: Convert DTO to Lending
-        public async Task<ActionResult<Lending>> LendDevice(LendingDTO lendingDTO, int userID)
+        public async Task<ActionResult<Lending>> LendDevice(LendingDTO lendingDTO, int userId)
         {
-            return await _lendingRepository.CreateLending(lendingDTO, userID);
+            return await _lendingRepository.CreateLending(lendingDTO, userId);
         }
 
-        public async Task<IEnumerable<OwnLendingDTO>> GetOwnDevices(int userId)
+        public async Task<IEnumerable<OwnLendingDTO>> GetOwnLendings(int userId)
         {
-            //repo get
-            //in dtos umwandeln
             List<OwnLendingDTO> ownLendingDTOs = new List<OwnLendingDTO>();
             var ownLendings = await _lendingRepository.GetOwnLendings(userId);
             
@@ -43,6 +41,11 @@ namespace device_wall_backend.Modules.Lendings.Control
         public async Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId, int newUserId)
         {
             return await _lendingRepository.UpdateUserOfLending(lendingId, currentUserId, newUserId);
+        }
+
+        public async Task<ActionResult> CancelLending(int lendingId, int userId)
+        {
+            return await _lendingRepository.DeleteLending(lendingId, userId);
         }
     }
 }

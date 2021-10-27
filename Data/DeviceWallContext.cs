@@ -11,11 +11,13 @@ namespace device_wall_backend.Data
 
         public DbSet<Lending> Lendings { get; set; }
         public DbSet<Device> Devices { get; set; } 
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Lending>().ToTable("Lending");
             modelBuilder.Entity<Device>().ToTable("Device");
+            modelBuilder.Entity<User>().ToTable("User");
         }
     }
 }
