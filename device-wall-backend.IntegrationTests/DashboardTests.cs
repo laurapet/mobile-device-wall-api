@@ -14,9 +14,15 @@ using Xunit.Abstractions;
 // Assert
 namespace device_wall_backend.IntegrationTests
 {
-    //TODO: Initialize TestDB
     public class DashboardTests: IntegrationTest
     {
+        [Fact]
+        public async Task FakeURI_NotFound()
+        {
+            var response = await TestClient.GetAsync("fakeURI");
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        
         [Theory]
         [InlineData("Dashboard")]
         [InlineData("Dashboard/1")]
@@ -29,7 +35,6 @@ namespace device_wall_backend.IntegrationTests
         }
 
         [Fact]
-        //testen ob request müll ist
         public async Task GET_DeviceDetails_NotFound()
         {
             // Act
@@ -48,7 +53,8 @@ namespace device_wall_backend.IntegrationTests
             // Act
             var response = await TestClient.GetAsync($"Dashboard?operatingSystem={operatingSystem}");
             var deviceResults = JsonConvert.DeserializeObject<Device[]>(await response.Content.ReadAsStringAsync());
-            // Assert (nicht empty prüfen)
+            // Assert 
+            deviceResults.Should().NotBeEmpty();
             foreach (Device device in deviceResults)
             {
                 device.OperatingSystem.Should().Be(operatingSystem);
@@ -64,6 +70,7 @@ namespace device_wall_backend.IntegrationTests
             var response = await TestClient.GetAsync($"Dashboard?version={version}");
             var deviceResults = JsonConvert.DeserializeObject<Device[]>(await response.Content.ReadAsStringAsync());
             // Assert
+            deviceResults.Should().NotBeEmpty();
             foreach (Device device in deviceResults)
             {
                 device.Version.Should().Be(version);
@@ -79,6 +86,7 @@ namespace device_wall_backend.IntegrationTests
             var response = await TestClient.GetAsync($"Dashboard?isTablet={isTablet}");
             var deviceResults = JsonConvert.DeserializeObject<Device[]>(await response.Content.ReadAsStringAsync());
             // Assert
+            deviceResults.Should().NotBeEmpty();
             foreach (Device device in deviceResults)
             {
                 device.IsTablet.Should().Be(isTablet);
@@ -94,6 +102,7 @@ namespace device_wall_backend.IntegrationTests
             var response = await TestClient.GetAsync($"Dashboard?isLent={isLent}");
             var deviceResults = JsonConvert.DeserializeObject<Device[]>(await response.Content.ReadAsStringAsync());
             // Assert
+            deviceResults.Should().NotBeEmpty();
             foreach (Device device in deviceResults)
             {
                 if (isLent)
