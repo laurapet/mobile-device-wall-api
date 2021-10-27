@@ -11,6 +11,6 @@ namespace device_wall_backend.Modules.Lendings.Gateway
         public Task<ActionResult<Lending>> CreateLending(LendingDTO lendingDto, int userID);
         public Task<IEnumerable<Lending>> GetOwnLendings(int userId);
         public Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, int newUserId);
-        public Task<ActionResult> DeleteLending(int lendingID, int currentUserID);
+        public Task<ActionResult> DeleteLending(int lendingID);
     }
 }

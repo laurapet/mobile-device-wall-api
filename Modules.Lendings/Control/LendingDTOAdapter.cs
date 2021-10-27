@@ -5,7 +5,7 @@ namespace device_wall_backend.Modules.Lendings.Control
 {
     public class LendingDTOAdapter
     {
-        public OwnLendingDTO convertLendingToOwnDTO(Lending lending)
+        public OwnLendingDTO ConvertLendingToOwnDto(Lending lending)
         {
             OwnLendingDTO ownLendingDto = new OwnLendingDTO()
             {

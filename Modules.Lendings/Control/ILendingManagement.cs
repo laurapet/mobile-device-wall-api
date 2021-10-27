@@ -11,6 +11,6 @@ namespace device_wall_backend.Modules.Lendings.Control
         public Task<ActionResult<Lending>> LendDevice(LendingDTO lendingDTO, int userId);
         public Task<IEnumerable<OwnLendingDTO>> GetOwnLendings(int userId);
         public Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId, int newUserId);
-        public Task<ActionResult> CancelLending(int lendingId, int userId);
+        public Task<ActionResult> CancelLending(int lendingId);
     }
 }

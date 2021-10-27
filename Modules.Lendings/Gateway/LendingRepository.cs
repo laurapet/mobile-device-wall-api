@@ -71,7 +71,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             return new NoContentResult();
         }
 
-        public async Task<ActionResult> DeleteLending(int lendingID, int currentUserID)
+        public async Task<ActionResult> DeleteLending(int lendingID)
         {
             var lending = await _context.Lendings.FindAsync(lendingID);
             if (lending == null)

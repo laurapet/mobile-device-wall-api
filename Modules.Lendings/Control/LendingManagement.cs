@@ -32,7 +32,7 @@ namespace device_wall_backend.Modules.Lendings.Control
             
             foreach (Lending lending in ownLendings)
             {
-                ownLendingDTOs.Add(_converter.convertLendingToOwnDTO(lending));
+                ownLendingDTOs.Add(_converter.ConvertLendingToOwnDto(lending));
             }
 
             return ownLendingDTOs;
@@ -43,9 +43,9 @@ namespace device_wall_backend.Modules.Lendings.Control
             return await _lendingRepository.UpdateUserOfLending(lendingId, currentUserId, newUserId);
         }
 
-        public async Task<ActionResult> CancelLending(int lendingId, int userId)
+        public async Task<ActionResult> CancelLending(int lendingId)
         {
-            return await _lendingRepository.DeleteLending(lendingId, userId);
+            return await _lendingRepository.DeleteLending(lendingId);
         }
     }
 }

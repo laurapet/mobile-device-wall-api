@@ -34,17 +34,19 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         [HttpGet("{userID}")]
         public async Task<ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(int userID)
         {
-            //falls im securitycontext keine userID/Token gesetzt ist 403
+            //falls im securitycontext keine userID/Token gesetzt ist 403 oder 401?
             return Ok(await _lendingManagement.GetOwnLendings(userID));
         }
 
+        //ist das problematisch, dass man pro Gerät, das man ausleihen will entweder das erstellte Lending zurückbekommt oder einen Fehlercode? 
+        //soll ggf. ein insgesamter Fehlercode zurückgegeben werden falls ein Gerät nicht ausgeliehen werden konnte?
         [HttpPost]
         public async Task<IEnumerable<ActionResult<Lending>>> LendDevice([FromBody]List<LendingListDTO> lendingList, int userID)
         {
             List <ActionResult<Lending>> lendingResults = new List<ActionResult<Lending>>();
-            foreach (var lendingDTO in lendingList)
+            foreach (var lendingListDto in lendingList)
             {
-                LendingDTO l = new LendingDTO(){DeviceID = lendingDTO.DeviceID, UserID = userID, IsLongterm = lendingDTO.IsLongterm};
+                LendingDTO l = new LendingDTO(){DeviceID = lendingListDto.DeviceID, UserID = userID, IsLongterm = lendingListDto.IsLongterm};
                 lendingResults.Add(await _lendingManagement.LendDevice(l, userID));
             }
             return lendingResults;
@@ -54,6 +56,13 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         public async Task<ActionResult> ChangeUserOfLending(int lendingID, int currentUserID, int newUserID)
         {
             return await _lendingManagement.ChangeUserOfLending(lendingID, currentUserID, newUserID);
+        }
+        
+        //Canceln funktioniert über einscannen mit hardware, bei zentralem Tablet sollte man zur Rückgabe nicht wieder einloggen müssen. Deswegen keine Übergabe der userID?
+        [HttpDelete("{lendingID}")]
+        public async Task<ActionResult> CancelLending(int lendingID)
+        {
+            return await _lendingManagement.CancelLending(lendingID);
         }
     }
 }
