@@ -6,7 +6,7 @@ using device_wall_backend.Modules.Dashboard.Control;
 namespace device_wall_backend.Modules.Dashboard.Boundary
 {
     /// <summary>
-    /// class for all API-calls regarding the Dashboard of the Device Wall to get an overview of all Devices and their properties
+    /// Class for all API-calls regarding the dashboard of the Device Wall to get an overview of all devices and their properties
     /// </summary>
     [ApiController]
     [Route("[controller]")]
