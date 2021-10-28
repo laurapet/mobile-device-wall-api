@@ -18,7 +18,6 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             _context = context;
         }
 
-        //TODO: ausprobieren
         public async Task<ActionResult<Lending>> CreateLending(LendingDTO lendingDto, int userId)
         {
             var deviceToLend = await _context.Devices.FindAsync(lendingDto.DeviceID);
@@ -36,7 +35,8 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             var user = await _context.Users.FindAsync(userId);
             var lendingToCreate = new Lending()
             {
-                Device = deviceToLend, DeviceID = deviceToLend.DeviceID,
+                Device = deviceToLend, 
+                DeviceID = deviceToLend.DeviceID,
                 User = user
             };
 

@@ -22,5 +22,17 @@ namespace device_wall_backend.Modules.Lendings.Control
 
             return ownLendingDto;
         }
+        
+        public LendingDTO ConvertLendingToDto(Lending lending)
+        {
+            LendingDTO lendingDto = new LendingDTO()
+            {
+                DeviceID = lending.DeviceID,
+                UserID = lending.UserID,
+                IsLongterm = lending.IsLongterm
+            };
+
+            return lendingDto;
+        }
     }
 }
