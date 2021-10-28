@@ -42,10 +42,9 @@ namespace device_wall_backend.Modules.Devices.Boundary
         [HttpPost]
         public async Task<ActionResult<Device>> CreateDevice(Device device)
         {
-            
             _context.Devices.Add(device);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetDeviceByID), new{ id = device.DeviceID}, device);
+            return CreatedAtAction(nameof(GetDeviceByID), new{ id = device.DeviceID }, device);
         }
 
         [HttpPut("{deviceID}")]
@@ -67,17 +66,16 @@ namespace device_wall_backend.Modules.Devices.Boundary
         [HttpDelete("{deviceID}")]
         public async Task<IActionResult> DeleteTodoItem(long deviceID)
         {
-            var device = await _context.Devices.FindAsync(deviceID);
-            if (device == null)
+            var deviceToDelete = await _context.Devices.FindAsync(deviceID);
+            if (deviceToDelete == null)
             {
                 return NotFound();
             }
-            //check if Device is part of an ongoing Lending. If it is return warning (?) or delete Lending with it
             //TODO: gucken, ob das includen für ein cascade delete reicht; ref: https://docs.microsoft.com/en-us/ef/core/saving/cascade-delete
             var deviceLendings = _context.Devices.Include(device => device.CurrentLending)
-                .Where(device => device.DeviceID == deviceID);
+                .Where(device => device.DeviceID == deviceToDelete.DeviceID);
             
-            _context.Devices.Remove(device);
+            _context.Devices.Remove(deviceToDelete);
             await _context.SaveChangesAsync();
             return NoContent();
         }

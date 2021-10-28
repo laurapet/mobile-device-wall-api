@@ -55,10 +55,8 @@
     <Folder Include="Modules.Dashboard\Gateway\" />
     <Folder Include="Modules.Dashboard\Control\DTOs\" />
     <Folder Include="Modules.Devices\" />
-    <Folder Include="Modules.Devices\Entity\" />
     <Folder Include="Modules.Lendings\" />
     <Folder Include="Modules.Lendings\Boundary\" />
-    <Folder Include="Modules.Lendings\Control\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Modules.Dashboard\Gateway\DashboardContext.cs" />

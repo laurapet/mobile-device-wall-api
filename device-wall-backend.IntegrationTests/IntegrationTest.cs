@@ -15,6 +15,20 @@ namespace device_wall_backend.IntegrationTests
     {
         protected readonly HttpClient TestClient;
 
+        private List<Device> _seedingDevices
+        {
+            get
+            {
+                return new List<Device>()
+                {
+                    new() {Name = "iPhone 5", OperatingSystem = "iOS", Version = "10.3.4"},
+                    new() {Name = "Samsung Galaxy S5", OperatingSystem = "Android", Version = "6.0.1"},
+                    new() {Name = "iPhone 5", OperatingSystem = "iOS", Version = "10.3.4", IsTablet = true},
+                    new() {Name = "Samsung Galaxy S5", OperatingSystem = "Android", Version = "6.0.1", IsTablet = true}
+                };
+            }
+        }
+        
         public IntegrationTest()
         {
             var factory = new WebApplicationFactory<Startup>()
@@ -43,28 +57,16 @@ namespace device_wall_backend.IntegrationTests
             TestClient = factory.CreateClient();
         }
         
-        public static void InitializeDbForTests(DeviceWallContext db)
+        public void InitializeDbForTests(DeviceWallContext db)
         {
-            db.Devices.AddRange(GetSeedingDevices());
+            db.Devices.AddRange(_seedingDevices);
             db.SaveChanges();
         }
 
-        public static void ReinitializeDbForTests(DeviceWallContext db)
+        public void ReinitializeDbForTests(DeviceWallContext db)
         {
             db.Devices.RemoveRange(db.Devices);
             InitializeDbForTests(db);
         }
-
-        public static List<Device> GetSeedingDevices()
-        {
-            return new List<Device>()
-            {
-                new Device {Name = "iPhone 5", OperatingSystem = "iOS", Version = "10.3.4"},
-                new Device {Name = "Samsung Galaxy S5", OperatingSystem = "Android", Version = "6.0.1"},
-                new Device {Name = "iPhone 5", OperatingSystem = "iOS", Version = "10.3.4", IsTablet = true},
-                new Device {Name = "Samsung Galaxy S5", OperatingSystem = "Android", Version = "6.0.1", IsTablet = true}
-            };
-        }
-
     }
 }

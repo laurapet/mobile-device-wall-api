@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace device_wall_backend.Modules.Lendings.Boundary
 {
-    //TODO: getOwnLendings, changeUserIDinLending, search 
+    //TODO: getOwnLendings, changeUserIdInLending, search 
     [ApiController]
     [Route("lendings")]
     public class LendingController : ControllerBase
@@ -29,13 +29,16 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         [HttpPost]
         public async Task<ActionResult<Lending>> LendDevice([FromBody]List<int> deviceIDs)
         {
-            Lending l = new() { UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device { Name = "d"}, User = new User { Username = "u"} };
+            Lending l = new() { 
+                UserID = 1, 
+                DeviceID = 1, 
+                IsLongterm = true, 
+                Device = new Device { Name = "d"}, 
+                User = new User { Username = "u"} 
+            };
 
-            if (_context!=null)
-            {
-                _context.Lendings.Add(l);
-            }
-            
+            _context?.Lendings.Add(l);
+
             await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
