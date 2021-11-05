@@ -7,7 +7,6 @@ using device_wall_backend.Modules.Lendings.Control.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-//TODO: Error messages
 namespace device_wall_backend.Modules.Lendings.Gateway
 {
     public class LendingRepository: ILendingRepository
@@ -46,12 +45,12 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             return new NoContentResult();
         }
 
-        public async Task<ActionResult> DeleteLending(int lendingID)
+        public async Task<ActionResult> DeleteLending(int lendingId)
         {
-            var lending = await _context.Lendings.FindAsync(lendingID);
+            var lending = await _context.Lendings.FindAsync(lendingId);
             if (lending == null)
             {
-                return new NotFoundResult();
+                return new NotFoundObjectResult(new {message = "lending "+lendingId+" not found."});
             }
 
             _context.Lendings.Remove(lending);
@@ -65,7 +64,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             var lending = await _context.Lendings.FindAsync(lendingId);
             if (lending == null)
             {
-                return new NotFoundResult();
+                return new NotFoundObjectResult(new {message = "lending "+lendingId+" not found."});
             }
             return lending;
         }
@@ -78,13 +77,13 @@ namespace device_wall_backend.Modules.Lendings.Gateway
                 var deviceToLend = await _context.Devices.FindAsync(lendingListDto.DeviceID);
                 if (deviceToLend == null)
                 {
-                    return new NotFoundResult();
+                    return new NotFoundObjectResult(new {message = "device "+lendingListDto.DeviceID+" not found."});
                 }
             
                 _context.Entry(deviceToLend).Reference(d => d.CurrentLending).Load();
                 if (deviceToLend.CurrentLending != null)
                 {
-                    return new BadRequestResult();
+                    return new BadRequestObjectResult(new {message = "device "+lendingListDto.DeviceID+" is already lent."});
                 }
 
                 var user = await _context.Users.FindAsync(userId);
