@@ -8,9 +8,10 @@ namespace device_wall_backend.Modules.Lendings.Gateway
 {
     public interface ILendingRepository
     {
-        public Task<ActionResult<Lending>> CreateLending(LendingDTO lendingDto, int userID);
-        public Task<IEnumerable<Lending>> GetOwnLendings(int userId);
+        public Task<IEnumerable<Lending>>GetOwnLendings(int userId);
         public Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, int newUserId);
         public Task<ActionResult> DeleteLending(int lendingID);
+        public Task<ActionResult<Lending>> GetLendingByID(int lendingId);
+        public Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, int userId);
     }
 }

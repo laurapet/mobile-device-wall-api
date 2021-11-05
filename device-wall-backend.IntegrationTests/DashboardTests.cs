@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using device_wall_backend.Models;
 using FluentAssertions;
+using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
@@ -33,7 +34,7 @@ namespace device_wall_backend.IntegrationTests
         public async Task GET_DeviceDetails_NotFound()
         {
             // Act
-            var response = await TestClient.GetAsync($"Dashboard/{1000}");
+            var response = await TestClient.GetAsync($"Dashboard/{int.MaxValue}");
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

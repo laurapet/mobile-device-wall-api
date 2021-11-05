@@ -7,6 +7,7 @@ using device_wall_backend.Modules.Lendings.Control.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+//TODO: Error messages
 namespace device_wall_backend.Modules.Lendings.Gateway
 {
     public class LendingRepository: ILendingRepository
@@ -18,36 +19,10 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             _context = context;
         }
 
-        public async Task<ActionResult<Lending>> CreateLending(LendingDTO lendingDto, int userId)
-        {
-            var deviceToLend = await _context.Devices.FindAsync(lendingDto.DeviceID);
-            if (deviceToLend == null)
-            {
-                return new NotFoundResult();
-            }
-            
-            _context.Entry(deviceToLend).Reference(d => d.CurrentLending).Load();
-            if (deviceToLend.CurrentLending != null)
-            {
-                return new BadRequestResult();
-            }
-
-            var user = await _context.Users.FindAsync(userId);
-            var lendingToCreate = new Lending()
-            {
-                Device = deviceToLend, 
-                DeviceID = deviceToLend.DeviceID,
-                User = user
-            };
-
-            _context.Lendings.Add(lendingToCreate);
-            await _context.SaveChangesAsync();
-            return lendingToCreate;
-        }
-
         public async Task<IEnumerable<Lending>> GetOwnLendings(int userId)
         {
-            return await _context.Lendings.Include(lending => lending.Device).Where(lending => lending.UserID == userId).ToListAsync();
+            var lendings = await _context.Lendings.Include(lending => lending.Device).Where(lending => lending.UserID == userId).ToListAsync();
+            return lendings;
         }
 
         public async Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, int newUserId)
@@ -56,7 +31,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             var newUser = await _context.Users.FindAsync(newUserId);
             if (lending == null || newUser == null)
             {
-                return new NotFoundResult();
+                return new NotFoundObjectResult(new {message = "lending "+lendingId+" or user "+ newUserId+" not found."});
             }
             
             if (lending.UserID != currentUserId)//Or not Admin?
@@ -83,6 +58,49 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             await _context.SaveChangesAsync();
 
             return new NoContentResult();
+        }
+
+        public async Task<ActionResult<Lending>> GetLendingByID(int lendingId)
+        {
+            var lending = await _context.Lendings.FindAsync(lendingId);
+            if (lending == null)
+            {
+                return new NotFoundResult();
+            }
+            return lending;
+        }
+
+        public async Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, int userId)
+        {
+            List<Lending> lendingsToCreate = new List<Lending>();
+            foreach (var lendingListDto in lendingListDtos)
+            {
+                var deviceToLend = await _context.Devices.FindAsync(lendingListDto.DeviceID);
+                if (deviceToLend == null)
+                {
+                    return new NotFoundResult();
+                }
+            
+                _context.Entry(deviceToLend).Reference(d => d.CurrentLending).Load();
+                if (deviceToLend.CurrentLending != null)
+                {
+                    return new BadRequestResult();
+                }
+
+                var user = await _context.Users.FindAsync(userId);
+                var lending = new Lending()
+                {
+                    Device = deviceToLend, 
+                    DeviceID = deviceToLend.DeviceID,
+                    User = user,
+                    IsLongterm = lendingListDto.IsLongterm
+                };
+                lendingsToCreate.Add(lending);
+            }
+            
+            _context.Lendings.AddRange(lendingsToCreate);
+            await _context.SaveChangesAsync();
+            return new StatusCodeResult(201);
         }
     }
 }
