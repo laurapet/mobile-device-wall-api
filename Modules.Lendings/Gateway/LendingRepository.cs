@@ -24,18 +24,25 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             return lendings;
         }
 
+        //TODO: prüfen, ob User != Admin ist -> würde 403 auslösen
         public async Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, int newUserId)
         {
             var lending = await _context.Lendings.FindAsync(lendingId);
             var newUser = await _context.Users.FindAsync(newUserId);
-            if (lending == null || newUser == null)
+            if (lending == null)
             {
-                return new NotFoundObjectResult(new {message = "lending "+lendingId+" or user "+ newUserId+" not found."});
+                return new NotFoundObjectResult(new {message = "lending "+lendingId+" not found."});
             }
             
-            if (lending.UserID != currentUserId)//Or not Admin?
+            if (newUser == null)
             {
-                return new StatusCodeResult(403);// 'new ForbidResult()' requires Authenticationscheme
+                return new NotFoundObjectResult(new {message = "user "+ newUserId+" not found."});
+            }
+            
+            if (lending.UserID != currentUserId)
+            {
+                // 'new ForbidResult()' requires Authenticationscheme
+                return new StatusCodeResult(403);
             }
             
             lending.UserID = newUserId;

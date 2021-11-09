@@ -23,6 +23,7 @@ namespace device_wall_backend.IntegrationTests
         {
             // Act
             var response = await TestClient.GetAsync(uri);
+            
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
@@ -33,6 +34,7 @@ namespace device_wall_backend.IntegrationTests
             // Act
             var response = await TestClient.GetAsync($"lendings?userID={100}");
             var lendingResults = JsonConvert.DeserializeObject<OwnLendingDTO[]>(await response.Content.ReadAsStringAsync());
+            
             // Assert
             lendingResults.Should().BeEmpty();
         }
@@ -43,6 +45,7 @@ namespace device_wall_backend.IntegrationTests
             // Arrange
             await TestClient.DeleteAsync($"lendings/{1}");
             await TestClient.DeleteAsync($"lendings/{2}");
+            
             // Act
             var response = await TestClient.PostAsync($"lendings?userID={1}", new StringContent(
                     JsonConvert.SerializeObject(new Collection<LendingListDTO>()
@@ -65,6 +68,7 @@ namespace device_wall_backend.IntegrationTests
         {
             // Arrange
             await TestClient.DeleteAsync($"lendings/{1}");
+            
             // Act
             var response = await TestClient.PostAsync($"lendings?userID={1}", new StringContent(
                     JsonConvert.SerializeObject(new Collection<LendingListDTO>()
@@ -86,6 +90,7 @@ namespace device_wall_backend.IntegrationTests
         {
             // Arrange
             await TestClient.DeleteAsync($"lendings/{1}");
+            
             // Act
             var response = await TestClient.PostAsync($"lendings?userID={1}", new StringContent(
                     JsonConvert.SerializeObject(new Collection<LendingListDTO>()
@@ -113,12 +118,14 @@ namespace device_wall_backend.IntegrationTests
                 "application/json"
                 )
             );
+            
             // Act
             var response = await TestClient.PutAsync("lendings/1?currentUserID=1&newUserID=2", new StringContent(
                 JsonConvert.SerializeObject(null),
                 Encoding.UTF8,
                 "application/json"
             ));
+            
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
@@ -126,13 +133,13 @@ namespace device_wall_backend.IntegrationTests
         [Fact]
         public async Task PUT_Lending_DeviceNotFound()
         {
-            // Arrange
             // Act
             var response = await TestClient.PutAsync($"lendings/{int.MaxValue}?currentUserID=1&newUserID=2", new StringContent(
                 JsonConvert.SerializeObject(null),
                 Encoding.UTF8,
                 "application/json"
             ));
+            
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
@@ -140,9 +147,9 @@ namespace device_wall_backend.IntegrationTests
         [Fact]
         public async Task DELETE_Lending_Ok()
         {
-            // Arrange
             // Act
             var response = await TestClient.DeleteAsync($"lendings/{1}");
+            
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
@@ -150,9 +157,9 @@ namespace device_wall_backend.IntegrationTests
         [Fact]
         public async Task DELETE_Lending_NotFound()
         {
-            // Arrange
             // Act
             var response = await TestClient.DeleteAsync($"lendings/{int.MaxValue}");
+            
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

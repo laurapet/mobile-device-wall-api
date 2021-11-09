@@ -49,8 +49,17 @@ namespace device_wall_backend
                     {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
+
+            services.AddAuthentication().AddGitLab(options =>
+            {
+                options.ClientId = "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688";
+                options.ClientSecret = "7844a873747524022ed2c966b011c0404c3207aa1948a4e0b3d74afed8e99dec";
+                options.CallbackPath = "http://localhost:4000/";
+            });
             
-            
+            services.AddRazorPages();
+            services.AddCoreAdmin();
+            services.AddControllersWithViews();
             services.AddScoped<ILendingManagement,LendingManagement>();
             services.AddScoped<ILendingRepository,LendingRepository>();
             services.AddScoped<IDashboardManagement,DashboardManagement>();

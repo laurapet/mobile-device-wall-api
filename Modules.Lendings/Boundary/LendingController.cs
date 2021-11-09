@@ -17,12 +17,10 @@ namespace device_wall_backend.Modules.Lendings.Boundary
     [Route("lendings")]
     public class LendingController : ControllerBase
     {
-        private readonly DeviceWallContext _context;
         private readonly ILendingManagement _lendingManagement;
 
-        public LendingController(DeviceWallContext context, ILendingManagement lendingManagement)
+        public LendingController(ILendingManagement lendingManagement)
         {
-            _context = context;
             _lendingManagement = lendingManagement;
         }
 
@@ -43,7 +41,6 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         /// </summary>
         /// <param name="lendingID">The lendings ID</param>
         /// <returns>A lending with the given ID or 404 if there's no lending with the given ID</returns>
-        //TODO: Admin-Beschränkung?
         [HttpGet("{lendingID}")]
         public async Task<ActionResult> GetLendingByID(int lendingID)
         {
