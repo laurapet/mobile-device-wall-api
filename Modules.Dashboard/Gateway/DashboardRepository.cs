@@ -23,9 +23,10 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
         
         public async Task<IEnumerable<Device>> GetDevicesForDashboard(DeviceFilter filter)
         {
-            //Eager loading: When the entity is read, related data is retrieved along with it. This typically results in a single join query that retrieves all of the data that's needed.
+            //Eager loading: When the entity is read, related data is retrieved along with it.  
             //You specify eager loading in Entity Framework Core by using the Include and ThenInclude methods.
-            var lendingDevices = _context.Devices.Include(device => device.CurrentLending).ThenInclude(lending => lending.User);
+            var lendingDevices = _context.Devices.Include(device => device.CurrentLending)
+                .ThenInclude(lending => lending.User);
             var deviceFilterResult = lendingDevices.Where(device =>
                     device.OperatingSystem.Contains(filter.OperatingSystem ?? string.Empty) &&
                     device.Version.Contains(filter.Version ?? string.Empty));
@@ -37,7 +38,8 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
 
             if (filter.IsLent != null)
             {
-                bool filterIsLent = filter.IsLent.Value; //to make bool not nullable, so ternary expression works
+                //to make bool not nullable, so ternary expression works
+                bool filterIsLent = filter.IsLent.Value; 
                 deviceFilterResult = deviceFilterResult.Where(device => filterIsLent ? device.CurrentLending != null : device.CurrentLending == null);
             }
             

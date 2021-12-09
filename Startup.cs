@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using device_wall_backend.Data;
 using device_wall_backend.Modules.Dashboard.Control;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,8 +13,17 @@ using Microsoft.OpenApi.Models;
 using device_wall_backend.Modules.Dashboard.Gateway;
 using device_wall_backend.Modules.Lendings.Control;
 using device_wall_backend.Modules.Lendings.Gateway;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Text.Json;
+using device_wall_backend.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace device_wall_backend
 {
@@ -41,7 +47,9 @@ namespace device_wall_backend
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "device_wall_backend", Version = "v1" });
             });
-            
+
+            services.AddIdentity<DeviceWallUser, IdentityRole>()
+                .AddEntityFrameworkStores<DeviceWallContext>();
             //to avoid cyclic referencing in Serialization
             services.AddMvc()
                 .AddNewtonsoftJson(
@@ -49,12 +57,44 @@ namespace device_wall_backend
                     {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
-
-            services.AddAuthentication().AddGitLab(options =>
+            
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = "GitLab";
+                })
+                .AddCookie()
+            .AddGitLab("GitLab",options =>
             {
                 options.ClientId = "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688";
                 options.ClientSecret = "7844a873747524022ed2c966b011c0404c3207aa1948a4e0b3d74afed8e99dec";
-                options.CallbackPath = "http://localhost:4000/";
+                //CallbackPath: where the OAuth application redirects the user with state and code to the OAuth middleware internal route,
+                //which by default is /signin-gitlab
+                options.CallbackPath = "/";
+                options.AuthorizationEndpoint = "https://git.slashwhy.de/oauth/authorize";
+                options.TokenEndpoint = "https://git.slashwhy.de/oauth/token";
+                options.UserInformationEndpoint = "https://git.slashwhy.de/api/v4/user";
+                options.SaveTokens = true;
+
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+
+                options.Events = new OAuthEvents
+                {
+                    OnCreatingTicket = async context =>
+                    {
+                        var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+
+                        var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
+                        response.EnsureSuccessStatusCode();
+
+                        var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                        context.RunClaimActions(user.RootElement);
+                    }
+                };
             });
             
             services.AddRazorPages();
@@ -86,7 +126,7 @@ namespace device_wall_backend
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
