@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,10 +21,10 @@ namespace device_wall_backend.Modules.Lendings.Control
         }
 
         //TODO: schauen, ob userId in security context sonst 401 oder so
-        public async Task <IEnumerable<OwnLendingDTO>> GetOwnLendings(int userId)
+        public async Task <ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(string userId)
         {
             List<OwnLendingDTO> ownLendingDTOs = new List<OwnLendingDTO>();
-            var ownLendings = await _lendingRepository.GetOwnLendings(userId);
+            var ownLendings = await _lendingRepository.GetOwnLendings(Int32.Parse(userId));
             
             foreach (Lending lending in ownLendings)
             {

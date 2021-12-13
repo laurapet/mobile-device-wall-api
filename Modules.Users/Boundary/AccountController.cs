@@ -34,7 +34,7 @@ namespace device_wall_backend.Modules.Users.Boundary
             {
                 var userToCreate = new DeviceWallUser
                 {
-                    Id = id,
+                    Id = int.Parse(id),
                     UserName = name
                 };
             

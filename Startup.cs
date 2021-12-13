@@ -48,7 +48,7 @@ namespace device_wall_backend
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "device_wall_backend", Version = "v1" });
             });
 
-            services.AddIdentity<DeviceWallUser, IdentityRole>()
+            services.AddIdentity<DeviceWallUser, IdentityRole<int>>()
                 .AddEntityFrameworkStores<DeviceWallContext>();
             //to avoid cyclic referencing in Serialization
             services.AddMvc()
@@ -127,6 +127,7 @@ namespace device_wall_backend
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

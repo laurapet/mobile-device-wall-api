@@ -14,7 +14,7 @@ namespace device_wall_backend.Modules.Lendings.Control
         /// </summary>
         /// <param name="userId">The ID of the User the lending is assigned to</param>
         /// <returns>A List of OwnLendingDTOs</returns>
-        public Task<IEnumerable<OwnLendingDTO>> GetOwnLendings(int userId);
+        public Task<ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(string userId);
         
         /// <summary>
         /// Modifies the Lending entity by replacing an old userId with a new one by using the LendingRepository

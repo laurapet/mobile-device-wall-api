@@ -1,10 +1,11 @@
 using device_wall_backend.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace device_wall_backend.Data
 {
-    public class DeviceWallContext : IdentityDbContext{
+    public class DeviceWallContext : IdentityDbContext<DeviceWallUser,IdentityRole<int>,int>{
 
         public DeviceWallContext(DbContextOptions<DeviceWallContext> options) : base(options)
         {
@@ -13,6 +14,7 @@ namespace device_wall_backend.Data
         public DbSet<Lending> Lendings { get; set; }
         public DbSet<Device> Devices { get; set; } 
         public DbSet<User> Users { get; set; }
+        public DbSet<DeviceWallUser> DeviceWallUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -20,7 +20,8 @@ namespace device_wall_backend.Modules.Lendings.Gateway
 
         public async Task<IEnumerable<Lending>> GetOwnLendings(int userId)
         {
-            var lendings = await _context.Lendings.Include(lending => lending.Device).Where(lending => lending.UserID == userId).ToListAsync();
+            //var lendings = await _context.Lendings.Include(lending => lending.Device).Where(lending => lending.UserID == userId).ToListAsync();
+            var lendings = await _context.Lendings.Include(lending => lending.Device).Where(lending => lending.DeviceWallUser.Id.Equals(""+userId)).ToListAsync();
             return lendings;
         }
 
@@ -76,6 +77,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             return lending;
         }
 
+        //TODO:user rausnehmen
         public async Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, int userId)
         {
             List<Lending> lendingsToCreate = new List<Lending>();
@@ -93,12 +95,14 @@ namespace device_wall_backend.Modules.Lendings.Gateway
                     return new BadRequestObjectResult(new {message = "device "+lendingListDto.DeviceID+" is already lent."});
                 }
 
+                var deviceWallUser = await _context.DeviceWallUsers.FindAsync(userId);
                 var user = await _context.Users.FindAsync(userId);
                 var lending = new Lending()
                 {
                     Device = deviceToLend, 
                     DeviceID = deviceToLend.DeviceID,
                     User = user,
+                    DeviceWallUser = deviceWallUser,
                     IsLongterm = lendingListDto.IsLongterm
                 };
                 lendingsToCreate.Add(lending);
