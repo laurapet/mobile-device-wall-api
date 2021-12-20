@@ -20,6 +20,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Text.Json;
 using device_wall_backend.Models;
+using device_wall_backend.Modules.Users.Control;
+using device_wall_backend.Modules.Users.Gateway;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -50,23 +52,21 @@ namespace device_wall_backend
 
             services.AddIdentity<DeviceWallUser, IdentityRole<int>>()
                 .AddEntityFrameworkStores<DeviceWallContext>();
-            //to avoid cyclic referencing in Serialization
-            services.AddMvc()
-                .AddNewtonsoftJson(
-                    options =>
-                    {
-                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    });
             
             services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = "GitLab";
-                })
-                .AddCookie()
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "GitLab";
+            })
+            .AddCookie("Cookies",options =>
+            {
+                options.LoginPath = "/Account/login";
+                options.Cookie.Name = "Cookies";
+            })
             .AddGitLab("GitLab",options =>
             {
+                options.SignInScheme = IdentityConstants.ExternalScheme;
                 options.ClientId = "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688";
                 options.ClientSecret = "7844a873747524022ed2c966b011c0404c3207aa1948a4e0b3d74afed8e99dec";
                 //CallbackPath: where the OAuth application redirects the user with state and code to the OAuth middleware internal route,
@@ -78,7 +78,9 @@ namespace device_wall_backend
                 options.SaveTokens = true;
 
                 options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                options.ClaimActions.MapJsonKey(ClaimTypes.Name, "username");
+                options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "name");
+                options.ClaimActions.MapJsonKey("urn:gitlab:avatar", "avatar_url","url");
 
                 options.Events = new OAuthEvents
                 {
@@ -97,13 +99,23 @@ namespace device_wall_backend
                 };
             });
             
-            services.AddRazorPages();
+            //to avoid cyclic referencing in Serialization
+            services.AddMvc()
+                .AddNewtonsoftJson(
+                    options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    });
+            
             services.AddCoreAdmin();
+            services.AddControllers();
             services.AddControllersWithViews();
             services.AddScoped<ILendingManagement,LendingManagement>();
             services.AddScoped<ILendingRepository,LendingRepository>();
             services.AddScoped<IDashboardManagement,DashboardManagement>();
             services.AddScoped<IDashboardRepository,DashboardRepository>();
+            services.AddScoped<ISearchManagement, SearchManagement>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILogger,Logger<DashboardRepository>>();
         }
 
@@ -123,9 +135,8 @@ namespace device_wall_backend
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
 

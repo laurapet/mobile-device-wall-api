@@ -20,8 +20,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
 
         public async Task<IEnumerable<Lending>> GetOwnLendings(int userId)
         {
-            //var lendings = await _context.Lendings.Include(lending => lending.Device).Where(lending => lending.UserID == userId).ToListAsync();
-            var lendings = await _context.Lendings.Include(lending => lending.Device).Where(lending => lending.DeviceWallUser.Id.Equals(""+userId)).ToListAsync();
+            var lendings = await _context.Lendings.Include(lending => lending.Device).Where(lending => lending.DeviceWallUser.Id == userId).ToListAsync();
             return lendings;
         }
 
@@ -77,7 +76,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             return lending;
         }
 
-        //TODO:user rausnehmen
+        //TODO:user rausnehmen, wenn user nicht existiert dann gehts nicht:/
         public async Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, int userId)
         {
             List<Lending> lendingsToCreate = new List<Lending>();

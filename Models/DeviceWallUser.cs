@@ -7,6 +7,9 @@ namespace device_wall_backend.Models
 {
     public class DeviceWallUser: IdentityUser<int>
     {
+        public string AvatarUrl { get; set; }
+        public string Name { get; set; }
         public virtual ICollection<Lending> Lendings { get; set; }
+        
     }
 }

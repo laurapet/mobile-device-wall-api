@@ -13,7 +13,7 @@ namespace device_wall_backend.Data
 
         public static void Initialize(DeviceWallContext context)
         {
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             if (!context.Devices.Any())

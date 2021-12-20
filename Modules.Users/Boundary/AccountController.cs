@@ -1,9 +1,8 @@
 using System;
-using System.Net;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using device_wall_backend.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,36 +19,71 @@ namespace device_wall_backend.Modules.Users.Boundary
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        
+
+        [HttpGet("challenge")]
+        public async Task<IActionResult> ChallengeLogin(string returnUrl = "Account/login")
+        {
+            //Challenge: Requests authentication by the user (e.g. showing a login page)
+            //RedirectURI: where user is redirected after authentication
+            var provider = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider[0].Name, returnUrl);
+            return Challenge(properties);
+        }
+
+        //TODO: wenn nicht eingeloggt ist id = null
         [HttpGet("login")]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = "login")
         {
-            var claims = User.Claims;
-            var name = User.FindFirstValue(ClaimTypes.Name);
-            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
+            var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
+            if (loginInfo == null)
+            {
+                return await challengeLogin();
+            }
+            
+            var username = loginInfo.Principal.FindFirstValue(ClaimTypes.Name);
+            var id = loginInfo.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var avatarURL = loginInfo.Principal.FindFirstValue("urn:gitlab:avatar");
+            var name = loginInfo.Principal.FindFirstValue(ClaimTypes.GivenName);
+          
+            var userToCreate = new DeviceWallUser
+            {
+                Id = int.Parse(id),
+                UserName = username,
+                Name = name,
+                AvatarUrl = avatarURL
+            };
+            
             var user = await _userManager.FindByIdAsync(id);
-            //If the user doesn't exist in the db yet
             if (user == null)
             {
-                var userToCreate = new DeviceWallUser
-                {
-                    Id = int.Parse(id),
-                    UserName = name
-                };
-            
                 var result = await _userManager.CreateAsync(userToCreate);
                 if (result.Succeeded)
                 {
-                    //isPersistent: Flag indicating whether the sign-in cookie should persist after the browser is closed.
-                    await _signInManager.SignInAsync(userToCreate, isPersistent: false);
-                
+                    await _userManager.AddLoginAsync(userToCreate, loginInfo);
                 }
             }
+
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, false);
+            if (!signInResult.Succeeded)
+            {
+                Console.WriteLine("lets refresh ma dudes");
+                await _signInManager.RefreshSignInAsync(user);
+            }
             
-            //Challenge: Requests authentication by the user (e.g. showing a login page)
-            //RedirectURI: where user is redirected after authentication
-            return Challenge(new AuthenticationProperties() { RedirectUri = returnUrl }, "GitLab");
+            return Ok();
+        }
+        
+        [HttpGet("logout")]
+        public async void LogOut(string returnUrl = "login")
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+        private async Task<IActionResult> challengeLogin()
+        {
+            var provider = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider[0].Name, "Account/login");
+            return Challenge(properties);
         }
     }
 }
