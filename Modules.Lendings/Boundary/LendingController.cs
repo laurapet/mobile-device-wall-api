@@ -7,6 +7,7 @@ using device_wall_backend.Data;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Lendings.Control;
 using device_wall_backend.Modules.Lendings.Control.DTOs;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,12 @@ namespace device_wall_backend.Modules.Lendings.Boundary
     public class LendingController : ControllerBase
     {
         private readonly ILendingManagement _lendingManagement;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<DeviceWallUser> _userManager;
 
-        public LendingController(ILendingManagement lendingManagement)
+        public LendingController(ILendingManagement lendingManagement, Microsoft.AspNetCore.Identity.UserManager<DeviceWallUser> userManager)
         {
             _lendingManagement = lendingManagement;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         {
             if (User.Identity.IsAuthenticated)
             {
-                return await _lendingManagement.GetOwnLendings(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                return await _lendingManagement.GetOwnLendings(await getCurrentUser());
             }
             return new UnauthorizedResult();
         }
@@ -48,9 +51,9 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         /// <param name="lendingID">The lendings ID</param>
         /// <returns>A lending with the given ID or 404 if there's no lending with the given ID</returns>
         [HttpGet("{lendingID}")]
-        public async Task<ActionResult<Lending>> GetLendingByID(int lendingID)
+        public async Task<ActionResult<Lending>> GetLendingByID(int lendingId)
         {
-            return await _lendingManagement.GetLendingByID(lendingID);
+            return await _lendingManagement.GetLendingByID(lendingId);
         }
 
         /// <summary>
@@ -60,27 +63,36 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         /// <param name="userID">The userID of the user the lending is to be assigned to</param>
         /// <returns>201 if all Devices have been lent successfully. 400 if one of the Devices is already lent. 404 if one of the devices doesn't exist</returns>
         [HttpPost]
-        public async Task<ActionResult> LendDevices([FromBody]List<LendingListDTO> lendingList, int userID)
+        public async Task<ActionResult> LendDevices([FromBody]List<LendingListDTO> lendingList, string userId)
         {
-            return await _lendingManagement.LendDevices(lendingList, userID);
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                return await _lendingManagement.LendDevices(lendingList, user);
+            }
+            return NotFound();
         }
 
         /// <summary>
         /// Changes the user of a specific lending
         /// </summary>
         /// <param name="lendingID">The ID of the lending where the user is to be changed</param>
-        /// <param name="currentUserID">The ID of the current user that is assigned to the lending</param>
         /// <param name="newUserID">The ID of the new user that the lending is supposed to be assigned to</param>
-        /// <returns>A NoContentResult if the update was successful, otherwise 404</returns>
-        /// TODO: current User aus Header/ Securitycontext nehmen
+        /// <returns>   A NoContentResult if the update was successful,
+        ///             404 if no lending with the given ID has been found,
+        ///             
+        /// </returns>
+        /// TODO: TestUser für newUser
         [HttpPut("{lendingID}")]
-        public async Task<ActionResult> ChangeUserOfLending(int lendingID, int newUserID)
+        public async Task<ActionResult> ChangeUserOfLending(int lendingID, string newUserID)
         {
+            var currentUser = await getCurrentUser();
+            var newUser = await _userManager.FindByIdAsync(newUserID);
             if (User.Identity.IsAuthenticated)
             {
-                return await _lendingManagement.ChangeUserOfLending(lendingID,Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)), newUserID);
+                return await _lendingManagement.ChangeUserOfLending(lendingID, currentUser.Id, newUser);
             }
-            return new UnauthorizedResult();
+            return Unauthorized();
         }
         
         /// <summary>
@@ -92,6 +104,11 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         public async Task<ActionResult> CancelLending(int lendingID)
         {
             return await _lendingManagement.CancelLending(lendingID);
+        }
+
+        private async Task<DeviceWallUser> getCurrentUser()
+        {
+            return await _userManager.FindByIdAsync(User.Identity.GetUserId());
         }
     }
 }

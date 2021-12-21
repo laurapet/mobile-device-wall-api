@@ -21,10 +21,10 @@ namespace device_wall_backend.Modules.Lendings.Control
         }
 
         //TODO: schauen, ob userId in security context sonst 401 oder so
-        public async Task <ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(string userId)
+        public async Task <ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(DeviceWallUser user)
         {
             List<OwnLendingDTO> ownLendingDTOs = new List<OwnLendingDTO>();
-            var ownLendings = await _lendingRepository.GetOwnLendings(Int32.Parse(userId));
+            var ownLendings = await _lendingRepository.GetOwnLendings(user.Id);
             
             foreach (Lending lending in ownLendings)
             {
@@ -34,9 +34,9 @@ namespace device_wall_backend.Modules.Lendings.Control
             return ownLendingDTOs;
         }
 
-        public async Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId, int newUserId)
+        public async Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId, DeviceWallUser newUser)
         {
-            return await _lendingRepository.UpdateUserOfLending(lendingId, currentUserId, newUserId);
+            return await _lendingRepository.UpdateUserOfLending(lendingId, currentUserId, newUser);
         }
 
         public async Task<ActionResult> CancelLending(int lendingId)
@@ -49,9 +49,9 @@ namespace device_wall_backend.Modules.Lendings.Control
             return await _lendingRepository.GetLendingByID(lendingId);
         }
 
-        public async Task<ActionResult> LendDevices(List<LendingListDTO> lendingListDtos, int userId)
+        public async Task<ActionResult> LendDevices(List<LendingListDTO> lendingListDtos, DeviceWallUser user)
         {
-            return await _lendingRepository.CreateLendings(lendingListDtos, userId);
+            return await _lendingRepository.CreateLendings(lendingListDtos, user);
         }
     }
 }

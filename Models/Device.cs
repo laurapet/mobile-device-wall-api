@@ -17,7 +17,7 @@ namespace device_wall_backend.Models{
         public string Port { get; set; }
         public bool HasSIM { get; set; }
         
-        public List<String> ExceptionalCases { get; set; }
+        //public List<String> ExceptionalCases { get; set; }
 
         public Lending CurrentLending { get; set; }
 

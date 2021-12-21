@@ -26,7 +26,7 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
             //Eager loading: When the entity is read, related data is retrieved along with it.  
             //You specify eager loading in Entity Framework Core by using the Include and ThenInclude methods.
             var lendingDevices = _context.Devices.Include(device => device.CurrentLending)
-                .ThenInclude(lending => lending.User);
+                .ThenInclude(lending => lending.DeviceWallUser);
             var deviceFilterResult = lendingDevices.Where(device =>
                     device.OperatingSystem.Contains(filter.OperatingSystem ?? string.Empty) &&
                     device.Version.Contains(filter.Version ?? string.Empty));

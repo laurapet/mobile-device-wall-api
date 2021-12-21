@@ -14,7 +14,7 @@ namespace device_wall_backend.Modules.Lendings.Control
         /// </summary>
         /// <param name="userId">The ID of the User the lending is assigned to</param>
         /// <returns>A List of OwnLendingDTOs</returns>
-        public Task<ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(string userId);
+        public Task<ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings(DeviceWallUser user);
         
         /// <summary>
         /// Modifies the Lending entity by replacing an old userId with a new one by using the LendingRepository
@@ -23,7 +23,7 @@ namespace device_wall_backend.Modules.Lendings.Control
         /// <param name="currentUserId">The ID of the current User assigned to the lending</param>
         /// <param name="newUserId">The ID of the new user to be assigned to the lending</param>
         /// <returns>No Content (204) if the operation was successful, 404 if the lendings or users can't be found</returns>
-        public Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId, int newUserId);
+        public Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId, DeviceWallUser newUser);
         
         /// <summary>
         /// Deletes a lending by using the LendingRepository
@@ -38,6 +38,6 @@ namespace device_wall_backend.Modules.Lendings.Control
         /// <param name="lendingId">The ID of the lending to be found</param>
         /// <returns>The lending with the given ID if it exists, 404 if it doesn't</returns>
         public Task<ActionResult<Lending>> GetLendingByID(int lendingId);
-        public Task<ActionResult> LendDevices(List<LendingListDTO> lendingListDtos, int userId);
+        public Task<ActionResult> LendDevices(List<LendingListDTO> lendingListDtos, DeviceWallUser user);
     }
 }

@@ -22,7 +22,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
         /// <param name="currentUserId">The ID of the current User assigned to the lending</param>
         /// <param name="newUserId">The ID of the new user to be assigned to the lending</param>
         /// <returns>No Content (204) if the operation was succesful, 404 if the lendings or users can't be found</returns>
-        public Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, int newUserId);
+        public Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, DeviceWallUser newUser);
         
         /// <summary>
         /// Deletes a lending entity
@@ -44,6 +44,6 @@ namespace device_wall_backend.Modules.Lendings.Gateway
         /// <param name="lendingListDtos">A List of DTOs containing lending information</param>
         /// <param name="userId">The ID of the user the lending is to be assigned to</param>
         /// <returns>201 if the creation was successful, 400 if one of the given devices is already lent, 404 if the user or the device with a given ID can't be found</returns>
-        public Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, int userId);
+        public Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, DeviceWallUser user);
     }
 }

@@ -25,27 +25,25 @@ namespace device_wall_backend.Modules.Lendings.Gateway
         }
 
         //TODO: prüfen, ob User != Admin ist -> würde 403 auslösen
-        public async Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, int newUserId)
+        public async Task<ActionResult> UpdateUserOfLending(int lendingId, int currentUserId, DeviceWallUser newUser)
         {
             var lending = await _context.Lendings.FindAsync(lendingId);
-            var newUser = await _context.Users.FindAsync(newUserId);
             if (lending == null)
             {
-                return new NotFoundObjectResult(new {message = "lending "+lendingId+" not found."});
+                return new NotFoundObjectResult(new {message = "lending " + lendingId + " not found."});
             }
             
             if (newUser == null)
             {
-                return new NotFoundObjectResult(new {message = "user "+ newUserId+" not found."});
+                return new NotFoundObjectResult(new {message = "user " + newUser.Id + " not found."});
             }
             
-            if (lending.UserID != currentUserId)
+            if (lending.DeviceWallUser.Id != currentUserId)
             {
-                // 'new ForbidResult()' requires Authenticationscheme
-                return new StatusCodeResult(403);
+                return new ForbidResult();
             }
             
-            lending.UserID = newUserId;
+            lending.DeviceWallUser = newUser;
             _context.Entry(lending).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             
@@ -76,8 +74,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             return lending;
         }
 
-        //TODO:user rausnehmen, wenn user nicht existiert dann gehts nicht:/
-        public async Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, int userId)
+        public async Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, DeviceWallUser user)
         {
             List<Lending> lendingsToCreate = new List<Lending>();
             foreach (var lendingListDto in lendingListDtos)
@@ -94,14 +91,11 @@ namespace device_wall_backend.Modules.Lendings.Gateway
                     return new BadRequestObjectResult(new {message = "device "+lendingListDto.DeviceID+" is already lent."});
                 }
 
-                var deviceWallUser = await _context.DeviceWallUsers.FindAsync(userId);
-                var user = await _context.Users.FindAsync(userId);
                 var lending = new Lending()
                 {
                     Device = deviceToLend, 
                     DeviceID = deviceToLend.DeviceID,
-                    User = user,
-                    DeviceWallUser = deviceWallUser,
+                    DeviceWallUser = user,
                     IsLongterm = lendingListDto.IsLongterm
                 };
                 lendingsToCreate.Add(lending);

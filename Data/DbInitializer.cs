@@ -42,13 +42,13 @@ namespace device_wall_backend.Data
                 {
                     new Lending
                     {
-                        UserID = 1, DeviceID = 1, IsLongterm = true, Device = new Device {Name = "iPhone 5"},
-                        User = new User {Username = "u1"}
+                        DeviceID = 3, IsLongterm = true, Device = new Device {Name = "iPhone 5"},
+                        //User = new User {Username = "u1"}
                     },
                     new Lending
                     {
-                        UserID = 2, DeviceID = 2, IsLongterm = true, Device = new Device {Name = "Samsung Galaxy S5"},
-                        User = new User {Username = "u2"}
+                        DeviceID = 2, IsLongterm = true, Device = new Device {Name = "Samsung Galaxy S5"},
+                        //User = new User {Username = "u2"}
                     }
                 };
             
