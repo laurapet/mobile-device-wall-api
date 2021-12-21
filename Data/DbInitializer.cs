@@ -40,7 +40,7 @@ namespace device_wall_backend.Data
             {
                 var lendings = new Lending[]
                 {
-                    new Lending
+                    /*new Lending
                     {
                         DeviceID = 3, IsLongterm = true, Device = new Device {Name = "iPhone 5"},
                         //User = new User {Username = "u1"}
@@ -49,7 +49,7 @@ namespace device_wall_backend.Data
                     {
                         DeviceID = 2, IsLongterm = true, Device = new Device {Name = "Samsung Galaxy S5"},
                         //User = new User {Username = "u2"}
-                    }
+                    }*/
                 };
             
                 foreach (Lending l in lendings)

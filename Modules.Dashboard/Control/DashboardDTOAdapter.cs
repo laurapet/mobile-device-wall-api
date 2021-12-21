@@ -27,7 +27,9 @@ namespace device_wall_backend.Modules.Dashboard.Control
             {
                 dashboardDTO.currentLending = new CurrentLendingDTO()
                 {
-                    LendingID = device.CurrentLending.DeviceID, Username = device.CurrentLending.DeviceWallUser.UserName,
+                    LendingID = device.CurrentLending.DeviceID, 
+                    Username = device.CurrentLending.DeviceWallUser.UserName,
+                    AvatarUrl = device.CurrentLending.DeviceWallUser.AvatarUrl,
                     IsLongterm = device.CurrentLending.IsLongterm
                 };
             }

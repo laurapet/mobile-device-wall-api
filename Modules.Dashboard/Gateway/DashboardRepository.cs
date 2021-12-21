@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using device_wall_backend.Data;
@@ -32,7 +33,7 @@ namespace device_wall_backend.Modules.Dashboard.Gateway
                     device.Version.Contains(filter.Version ?? string.Empty));
 
             if (filter.IsTablet != null)
-            {
+            { 
                 deviceFilterResult = deviceFilterResult.Where(device => device.IsTablet == filter.IsTablet);
             }
 
