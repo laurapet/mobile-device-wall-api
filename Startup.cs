@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -107,11 +108,13 @@ namespace device_wall_backend
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
             
-            services.AddRazorPages();
+            services.AddRazorPages()
+                .AddNewtonsoftJson();
             services.AddCoreAdmin();
-            
-            services.AddControllers();
             services.AddControllersWithViews();
+            services.AddControllers()
+                .AddNewtonsoftJson();
+            
             services.AddScoped<ILendingManagement,LendingManagement>();
             services.AddScoped<ILendingRepository,LendingRepository>();
             services.AddScoped<IDashboardManagement,DashboardManagement>();
@@ -125,6 +128,7 @@ namespace device_wall_backend
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope()){
+                Console.WriteLine("Migration");
                 var context = serviceScope.ServiceProvider.GetRequiredService<DeviceWallContext>();
                 //context.Database.Migrate();
             }
@@ -147,6 +151,7 @@ namespace device_wall_backend
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
         }
