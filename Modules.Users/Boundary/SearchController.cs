@@ -17,6 +17,11 @@ namespace device_wall_backend.Modules.Users.Boundary
             _searchManagement = searchManagement;
         }
 
+        /// <summary>
+        /// Gets Users whose usernames and full names contain the given search term.
+        /// </summary>
+        /// <param name="searchTerm">A String that must be contained in all returning usernames or names of the returning Users</param>
+        /// <returns>A list of DeviceWallUser objects</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DeviceWallUser>>> SearchUsers(string searchTerm)
         {

@@ -10,6 +10,5 @@ namespace device_wall_backend.Models
         public string AvatarUrl { get; set; }
         public string Name { get; set; }
         public virtual ICollection<Lending> Lendings { get; set; }
-        
     }
 }

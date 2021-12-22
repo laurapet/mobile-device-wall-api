@@ -25,14 +25,15 @@ namespace device_wall_backend.Modules.Users.Boundary
         [HttpGet("login")]
         public async Task<IActionResult> ChallengeLogin(string returnUrl = "Account/login-callback")
         {
-            return await challengeLogin();
+            var provider = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider[0].Name, "Account/login");
+            return Challenge(properties);
         }
         
         [HttpGet("login-callback")]
         public async Task<IActionResult> ExternalLoginCallback()
         {
             var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
-            
             var username = loginInfo.Principal.FindFirstValue(ClaimTypes.Name);
             var id = loginInfo.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
             var avatarURL = loginInfo.Principal.FindFirstValue("urn:gitlab:avatar");
@@ -69,13 +70,6 @@ namespace device_wall_backend.Modules.Users.Boundary
         public async void LogOut(string returnUrl = "login")
         {
             await _signInManager.SignOutAsync();
-        }
-
-        private async Task<IActionResult> challengeLogin()
-        {
-            var provider = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider[0].Name, "Account/login");
-            return Challenge(properties);
         }
     }
 }
