@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using device_wall_backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,25 +22,16 @@ namespace device_wall_backend.Modules.Users.Boundary
             _signInManager = signInManager;
         }
 
-        [HttpGet("challenge")]
-        public async Task<IActionResult> ChallengeLogin(string returnUrl = "Account/login")
-        {
-            //Challenge: Requests authentication by the user (e.g. showing a login page)
-            //RedirectURI: where user is redirected after authentication
-            var provider = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider[0].Name, returnUrl);
-            return Challenge(properties);
-        }
-
-        //TODO: wenn nicht eingeloggt ist id = null
         [HttpGet("login")]
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = "login")
+        public async Task<IActionResult> ChallengeLogin(string returnUrl = "Account/login-callback")
+        {
+            return await challengeLogin();
+        }
+        
+        [HttpGet("login-callback")]
+        public async Task<IActionResult> ExternalLoginCallback()
         {
             var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null)
-            {
-                return await challengeLogin();
-            }
             
             var username = loginInfo.Principal.FindFirstValue(ClaimTypes.Name);
             var id = loginInfo.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -66,7 +59,6 @@ namespace device_wall_backend.Modules.Users.Boundary
             var signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, false);
             if (!signInResult.Succeeded)
             {
-                Console.WriteLine("lets refresh ma dudes");
                 await _signInManager.RefreshSignInAsync(user);
             }
             

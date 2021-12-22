@@ -107,7 +107,9 @@ namespace device_wall_backend
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
             
+            services.AddRazorPages();
             services.AddCoreAdmin();
+            
             services.AddControllers();
             services.AddControllersWithViews();
             services.AddScoped<ILendingManagement,LendingManagement>();
@@ -139,6 +141,9 @@ namespace device_wall_backend
             
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStaticFiles();
+            
+            app.UseCoreAdminCustomUrl("admin");
 
             app.UseEndpoints(endpoints =>
             {
