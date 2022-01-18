@@ -45,5 +45,7 @@ namespace device_wall_backend.Modules.Lendings.Gateway
         /// <param name="userId">The ID of the user the lending is to be assigned to</param>
         /// <returns>201 if the creation was successful, 400 if one of the given devices is already lent, 404 if the user or the device with a given ID can't be found</returns>
         public Task<ActionResult> CreateLendings(List<LendingListDTO> lendingListDtos, DeviceWallUser user);
+
+        public Task<ActionResult<Device>> GetDeviceForLendingProcess(int deviceId);
     }
 }

@@ -53,5 +53,10 @@ namespace device_wall_backend.Modules.Lendings.Control
         {
             return await _lendingRepository.CreateLendings(lendingListDtos, user);
         }
+
+        public Task<ActionResult<Device>> GetDeviceForLendingProcess(int deviceId)
+        {
+            return _lendingRepository.GetDeviceForLendingProcess(deviceId);
+        }
     }
 }

@@ -26,6 +26,7 @@ using device_wall_backend.Modules.Users.Gateway;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json.Linq;
 
 namespace device_wall_backend
@@ -62,7 +63,7 @@ namespace device_wall_backend
             })
             .AddCookie("Cookies",options =>
             {
-                options.LoginPath = "/Account/login";
+                options.LoginPath = "/Account/login-callback";
                 options.Cookie.Name = "Cookies";
             })
             .AddGitLab("GitLab",options =>
@@ -99,7 +100,8 @@ namespace device_wall_backend
                     }
                 };
             });
-            
+
+            services.AddCors();
             //to avoid cyclic referencing in Serialization
             services.AddMvc()
                 .AddNewtonsoftJson(
@@ -139,9 +141,16 @@ namespace device_wall_backend
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "device_wall_backend v1"));
             }
+            
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors(options =>
+            {
+                options.AllowAnyOrigin();
+                options.AllowAnyHeader();
+                options.AllowAnyMethod();
+            });
             
             app.UseAuthentication();
             app.UseAuthorization();

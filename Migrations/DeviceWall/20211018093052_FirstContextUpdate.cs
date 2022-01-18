@@ -7,7 +7,7 @@ namespace device_wall_backend.Migrations.DeviceWall
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            /*migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Lending",
                 columns: table => new
                 {
@@ -19,7 +19,7 @@ namespace device_wall_backend.Migrations.DeviceWall
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lending", x => x.LendingID);
-                });*/
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

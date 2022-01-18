@@ -17,6 +17,7 @@ namespace device_wall_backend
         public static void Main(string[] args)
         {
             var builder = CreateHostBuilder(args);
+            
             var host = builder.Build();
             CreateDbIfNotExists(host);
             

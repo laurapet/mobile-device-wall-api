@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using device_wall_backend.Data;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Lendings.Control.DTOs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -104,6 +107,18 @@ namespace device_wall_backend.Modules.Lendings.Gateway
             _context.Lendings.AddRange(lendingsToCreate);
             await _context.SaveChangesAsync();
             return new StatusCodeResult(201);
+        }
+
+        public async Task<ActionResult<Device>> GetDeviceForLendingProcess(int deviceId)
+        {
+            var device = await _context.Devices.FindAsync(deviceId);
+            _context.Entry(device).Reference(d => d.CurrentLending).Load();
+            if (device.CurrentLending != null)
+            {
+                return new BadRequestResult();
+            }
+            return device;
+            
         }
     }
 }

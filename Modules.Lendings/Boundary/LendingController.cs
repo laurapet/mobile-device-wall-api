@@ -110,5 +110,11 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         {
             return await _userManager.FindByIdAsync(User.Identity.GetUserId());
         }
+        
+        [HttpGet("lending-process")]
+        public Task<ActionResult<Device>> GetDeviceForLendingProcess(int deviceId)
+        {
+            return _lendingManagement.GetDeviceForLendingProcess(deviceId);
+        }
     }
 }

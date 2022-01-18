@@ -18,6 +18,10 @@ namespace device_wall_backend.Modules.Users.Gateway
 
         public async Task<ActionResult<IEnumerable<DeviceWallUser>>> GetUsersForSearch(string searchTerm)
         {
+            if (searchTerm == null)
+            {
+                return await _context.DeviceWallUsers.ToListAsync();
+            }
             return await _context.DeviceWallUsers.Where(user => user.UserName.Contains(searchTerm) || user.Name.Contains(searchTerm)).ToListAsync();
         }
     }

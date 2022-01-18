@@ -39,5 +39,7 @@ namespace device_wall_backend.Modules.Lendings.Control
         /// <returns>The lending with the given ID if it exists, 404 if it doesn't</returns>
         public Task<ActionResult<Lending>> GetLendingByID(int lendingId);
         public Task<ActionResult> LendDevices(List<LendingListDTO> lendingListDtos, DeviceWallUser user);
+
+        public Task<ActionResult<Device>> GetDeviceForLendingProcess(int deviceId);
     }
 }
