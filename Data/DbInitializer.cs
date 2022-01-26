@@ -21,7 +21,7 @@ namespace device_wall_backend.Data
                 
                 var devices = new Device[]
                 {
-                    new Device {Name = "iPhone 5", OperatingSystem = "iOS", Version = "10.3.4"},
+                    new Device {Name = "iPhone 5", OperatingSystem = "iOS", Version = "10.3.4", HorizontalSize = 1170, VerticalSize = 2532, Dpi = 460, Manufacturer = "Apple", Port = "Lightning", IsTablet = false, ExceptionalCases = "Gerät befindet sich im iOS Beta-Programm"},
                     new Device {Name = "iPhone 6", OperatingSystem = "iOS", Version = "10.3.4"},
                     new Device {Name = "iPhone 7", OperatingSystem = "iOS", Version = "10.3.4"},
                     new Device {Name = "iPhone 8", OperatingSystem = "iOS", Version = "10.3.4"},

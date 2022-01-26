@@ -42,7 +42,11 @@ namespace device_wall_backend.Modules.Lendings.Boundary
             {
                 return await _lendingManagement.GetOwnLendings(await getCurrentUser());
             }
-            return new UnauthorizedResult();
+            // For development purposes only, to be removed as soon as login works
+            DeviceWallUser user = await _userManager.FindByIdAsync("563");
+            return await _lendingManagement.GetOwnLendings(user);
+            //
+            //return new UnauthorizedResult();
         }
         
         /// <summary>

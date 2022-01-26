@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Text.Json;
+using AspNet.Security.OAuth.GitLab;
+using device_wall_backend.Authentication;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Users.Control;
 using device_wall_backend.Modules.Users.Gateway;
@@ -65,8 +67,8 @@ namespace device_wall_backend
             {
                 options.LoginPath = "/Account/login-callback";
                 options.Cookie.Name = "Cookies";
-            })
-            .AddGitLab("GitLab",options =>
+            }).AddOAuth<GitLabAuthenticationOptions,MDWGitLabAuthHandler>/*
+            .AddGitLab*/("GitLab",options =>
             {
                 options.SignInScheme = IdentityConstants.ExternalScheme;
                 options.ClientId = "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688";

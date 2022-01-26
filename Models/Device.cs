@@ -10,6 +10,7 @@ namespace device_wall_backend.Models{
         public string OperatingSystem { get; set; }
         public string Version { get; set; }
         public string Manufacturer { get; set; }
+        //TODO: Add seriennr.
         public bool IsTablet { get; set; }
         public int HorizontalSize { get; set; }
         public int VerticalSize { get; set; }
@@ -17,7 +18,7 @@ namespace device_wall_backend.Models{
         public string Port { get; set; }
         public bool HasSIM { get; set; }
         
-        //public List<String> ExceptionalCases { get; set; }
+        public String ExceptionalCases { get; set; }
 
         public Lending CurrentLending { get; set; }
 
