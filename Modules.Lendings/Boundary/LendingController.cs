@@ -83,20 +83,23 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         /// <param name="lendingID">The ID of the lending where the user is to be changed</param>
         /// <param name="newUserID">The ID of the new user that the lending is supposed to be assigned to</param>
         /// <returns>   A NoContentResult if the update was successful,
-        ///             404 if no lending with the given ID has been found,
-        ///             
+        ///             404 if no lending with the given ID has been found.
         /// </returns>
-        /// TODO: TestUser für newUser
-        [HttpPut("{lendingID}")]
-        public async Task<ActionResult> ChangeUserOfLending(int lendingID, string newUserID)
+        //TODO: remove test code, check for authentication
+        [HttpPut("{lendingId}")]
+        public async Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId ,string newUserId)
         {
-            var currentUser = await getCurrentUser();
-            var newUser = await _userManager.FindByIdAsync(newUserID);
-            if (User.Identity.IsAuthenticated)
+            //var currentUser = await getCurrentUser();
+            Console.WriteLine("newUserId: "+newUserId);
+            var newUser = await _userManager.FindByIdAsync(newUserId);
+            Console.WriteLine("newUser: "+newUser.Name);
+
+            return await _lendingManagement.ChangeUserOfLending(lendingId, currentUserId, newUser);
+
+            /*if (User.Identity.IsAuthenticated)
             {
-                return await _lendingManagement.ChangeUserOfLending(lendingID, currentUser.Id, newUser);
-            }
-            return Unauthorized();
+            }*/
+            //return Unauthorized();
         }
         
         /// <summary>

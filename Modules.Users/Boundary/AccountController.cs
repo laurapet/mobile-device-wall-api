@@ -33,6 +33,8 @@ namespace device_wall_backend.Modules.Users.Boundary
         [HttpGet("login-callback")]
         public async Task<IActionResult> ExternalLoginCallback()
         {
+            await createTestUser();
+            
             var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
             var username = loginInfo.Principal.FindFirstValue(ClaimTypes.Name);
             var id = loginInfo.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -64,6 +66,28 @@ namespace device_wall_backend.Modules.Users.Boundary
             }
             
             return Ok();
+        }
+
+        public async Task createTestUser()
+        {
+            var testUser = new DeviceWallUser()
+            {
+                Id = 1,
+                UserName = "testusername",
+                Name = "Testname",
+                AvatarUrl = "https://via.placeholder.com/50"
+            };
+            Console.WriteLine("testuser 1");
+
+            var user = await _userManager.FindByIdAsync("1");
+            if (user == null)
+            {
+                var result = await _userManager.CreateAsync(testUser);
+                if (result.Succeeded)
+                {
+                    Console.WriteLine("testuser created");
+                }
+            }
         }
         
         [HttpGet("logout")]
