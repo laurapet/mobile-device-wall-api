@@ -90,9 +90,7 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         public async Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId ,string newUserId)
         {
             //var currentUser = await getCurrentUser();
-            Console.WriteLine("newUserId: "+newUserId);
             var newUser = await _userManager.FindByIdAsync(newUserId);
-            Console.WriteLine("newUser: "+newUser.Name);
 
             return await _lendingManagement.ChangeUserOfLending(lendingId, currentUserId, newUser);
 
@@ -118,6 +116,7 @@ namespace device_wall_backend.Modules.Lendings.Boundary
             return await _userManager.FindByIdAsync(User.Identity.GetUserId());
         }
         
+        [AllowAnonymous]
         [HttpGet("lending-process")]
         public Task<ActionResult<Device>> GetDeviceForLendingProcess(int deviceId)
         {

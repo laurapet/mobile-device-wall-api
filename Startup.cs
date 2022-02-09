@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -20,15 +22,19 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Text.Json;
+using System.Threading.Tasks;
 using AspNet.Security.OAuth.GitLab;
 using device_wall_backend.Authentication;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Users.Control;
 using device_wall_backend.Modules.Users.Gateway;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 
 namespace device_wall_backend
@@ -51,18 +57,85 @@ namespace device_wall_backend
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "device_wall_backend", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "device_wall_backend", Version = "v1"});
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows()
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow()
+                        {
+                            AuthorizationUrl = new Uri("https://git.slashwhy.de/oauth/authorize"),
+                            TokenUrl = new Uri("https://git.slashwhy.de/oauth/token"),
+                            Scopes = new Dictionary<string, string>
+                            {
+                                {"read_user", "reads the user"}
+                            }
+                        }
+                    }
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "oauth2"
+                            },
+                            Scheme = "oauth2",
+                            Name = "oauth2",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
             });
-
             services.AddIdentity<DeviceWallUser, IdentityRole<int>>()
                 .AddEntityFrameworkStores<DeviceWallContext>();
             
             services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "GitLab";
-            })
+                {
+                    options.DefaultAuthenticateScheme=JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme=JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme=JwtBearerDefaults.AuthenticationScheme;
+                })
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = "https://git.slashwhy.de";
+                    options.Audience = "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidAudience =  "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688",
+                        ValidIssuer = "https://git.slashwhy.de",
+                    };
+
+                    options.SaveToken = true;
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            // Add the access_token as a claim, as we may actually need it
+                            var accessToken = context.SecurityToken as JwtSecurityToken;
+                            if (accessToken != null)
+                            {
+                                ClaimsIdentity identity = context.Principal.Identity as ClaimsIdentity;
+                                if (identity != null)
+                                {
+                                    identity.AddClaim(new Claim("access_token", accessToken.RawData));
+                                }
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                    
+                }
+            )
             .AddCookie("Cookies",options =>
             {
                 options.LoginPath = "/Account/login-callback";
@@ -102,6 +175,7 @@ namespace device_wall_backend
                     }
                 };
             });
+            services.AddHttpContextAccessor();
 
             services.AddCors();
             //to avoid cyclic referencing in Serialization
@@ -141,10 +215,17 @@ namespace device_wall_backend
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "device_wall_backend v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "device_wall_backend v1");
+                    c.RoutePrefix = string.Empty;
+                    c.OAuthClientId("fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688");
+                    c.OAuthClientSecret("7844a873747524022ed2c966b011c0404c3207aa1948a4e0b3d74afed8e99dec");
+                    c.OAuth2RedirectUrl("/");
+                    c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
+                });
             }
             
-
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors(options =>
