@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal AS base
 WORKDIR /app
-EXPOSE 4000
+EXPOSE 5001
 
-ENV ASPNETCORE_URLS=http://+:4000
+ENV ASPNETCORE_URLS=http://+:5001
 
 FROM postgres:latest
 EXPOSE 5432
