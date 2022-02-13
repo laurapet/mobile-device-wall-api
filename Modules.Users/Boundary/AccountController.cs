@@ -35,15 +35,16 @@ namespace device_wall_backend.Modules.Users.Boundary
         {
             if (User.Identity.IsAuthenticated)
             {
-                Console.WriteLine(User.FindFirst(ClaimTypes.NameIdentifier));
+                Console.WriteLine("User is authenticated");
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var userToCreate = new DeviceWallUser
                 {
-                    Id = int.Parse(ClaimTypes.NameIdentifier),
+                    Id = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
                     UserName = userDto.userName,
                     Name = userDto.name,
                     AvatarUrl = userDto.avatarUrl
                 };
-                var user = await _userManager.FindByIdAsync(ClaimTypes.NameIdentifier);
+                var user = await _userManager.FindByIdAsync(userId);
                 if (user == null)
                 {
                     var result = await _userManager.CreateAsync(userToCreate);

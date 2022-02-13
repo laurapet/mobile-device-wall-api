@@ -206,9 +206,11 @@ namespace device_wall_backend
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope()){
-                Console.WriteLine("Migration");
                 var context = serviceScope.ServiceProvider.GetRequiredService<DeviceWallContext>();
-                //context.Database.Migrate();
+                if (context.Database.IsSqlServer())
+                {
+                    context.Database.Migrate();
+                }
             }
 
             if (env.IsDevelopment())
