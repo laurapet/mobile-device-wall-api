@@ -114,20 +114,7 @@ namespace device_wall_backend.Modules.Users.Boundary
         [HttpGet("current-user")]
         public async Task<DeviceWallUser> GetCurrentUser()
         {
-            //return User.FindFirstValue(ClaimTypes.NameIdentifier);
             return await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            //return _httpContextAccessor.HttpContext.User.Identity.GetUserId();
-
-            if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-            {
-                //var user = await _userManager.FindByIdAsync(IdentityExtensions.GetUserId(User.Identity));
-                /*Console.WriteLine(userid);
-                var user = await _userManager.FindByIdAsync(userid);
-                Console.WriteLine(user.Name);
-
-                return user;*/
-            }
-            return null;
         }
 
         private async Task createTestUser()
@@ -139,7 +126,6 @@ namespace device_wall_backend.Modules.Users.Boundary
                 Name = "Testname",
                 AvatarUrl = "https://via.placeholder.com/50"
             };
-            Console.WriteLine("testuser 1");
 
             var user = await _userManager.FindByIdAsync("1");
             if (user == null)
