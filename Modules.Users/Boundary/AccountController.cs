@@ -20,56 +20,45 @@ namespace device_wall_backend.Modules.Users.Boundary
     {
         private readonly Microsoft.AspNetCore.Identity.UserManager<DeviceWallUser> _userManager;
         private readonly SignInManager<DeviceWallUser> _signInManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<DeviceWallUser> userManager, SignInManager<DeviceWallUser> signInManager,IHttpContextAccessor httpContextAccessor )
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<DeviceWallUser> userManager, SignInManager<DeviceWallUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _httpContextAccessor = httpContextAccessor;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserDTO userDto)
         {
-            if (User.Identity.IsAuthenticated)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userToCreate = new DeviceWallUser
             {
-                Console.WriteLine("User is authenticated");
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var userToCreate = new DeviceWallUser
+                Id = Int32.Parse(userId),
+                UserName = userDto.userName,
+                Name = userDto.name,
+                AvatarUrl = userDto.avatarUrl
+            };
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                var result = await _userManager.CreateAsync(userToCreate);
+                if (result.Succeeded)
                 {
-                    Id = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
-                    UserName = userDto.userName,
-                    Name = userDto.name,
-                    AvatarUrl = userDto.avatarUrl
-                };
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
-                {
-                    var result = await _userManager.CreateAsync(userToCreate);
-                    if (result.Succeeded)
-                    {
-                        Console.WriteLine("User created");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("User exists");
+                   return Created(new PathString("/"+user.Id),user);
                 }
             }
-            else
-            {
-                Console.WriteLine("not authenticated");
-            }
-
-            /*var provider = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider[0].Name, returnUrl);
-            */
-            //return Challenge();
             return Ok();
         }
-        
+
+        [HttpGet("external-login")]
+        public async Task<IActionResult> ExternalLogin(string returnUrl="login-callback")
+        {
+            var provider = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider[0].Name, returnUrl);
+            return Challenge();
+        }
+
         [HttpGet("login-callback")]
         public async Task<IActionResult> ExternalLoginCallback()
         {
@@ -100,7 +89,6 @@ namespace device_wall_backend.Modules.Users.Boundary
             }
 
             var signInResult = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, true);
-            //var signResult = await _signInManager.SignInAsync(user, true);
             await HttpContext.SignInAsync(loginInfo.Principal);
             if (!signInResult.Succeeded)
             {

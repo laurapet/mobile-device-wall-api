@@ -105,35 +105,7 @@ namespace device_wall_backend
                 {
                     options.Authority = "https://git.slashwhy.de";
                     options.Audience = "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688";
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidAudience =  "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688",
-                        ValidIssuer = "https://git.slashwhy.de",
-                    };
-
                     options.SaveToken = true;
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = context =>
-                        {
-                            // Add the access_token as a claim, as we may actually need it
-                            var accessToken = context.SecurityToken as JwtSecurityToken;
-                            if (accessToken != null)
-                            {
-                                ClaimsIdentity identity = context.Principal.Identity as ClaimsIdentity;
-                                if (identity != null)
-                                {
-                                    identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                                }
-                            }
-
-                            return Task.CompletedTask;
-                        }
-                    };
-                    
                 }
             )
             .AddCookie("Cookies",options =>

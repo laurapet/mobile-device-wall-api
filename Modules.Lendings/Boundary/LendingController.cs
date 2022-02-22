@@ -34,19 +34,15 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         /// Gets all lendings of the current user
         /// </summary>
         /// <param name="userID">The ID of the current user</param>
-        /// <returns>A List of all Lendings created by the current user.</returns>
+        /// <returns>
+        /// A List of all Lendings created by the current user if the User is authorized.
+        /// Returns 401 if the User is not authorized.
+        /// </returns>
+        [Authorize]
         [HttpGet]
         public async Task <ActionResult<IEnumerable<OwnLendingDTO>>> GetOwnLendings()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return await _lendingManagement.GetOwnLendings(await getCurrentUser());
-            }
-            // For development purposes only, to be removed as soon as login works
-            DeviceWallUser user = await _userManager.FindByIdAsync("563");
-            return await _lendingManagement.GetOwnLendings(user);
-            //
-            //return new UnauthorizedResult();
+            return await _lendingManagement.GetOwnLendings(await getCurrentUser());
         }
         
         /// <summary>
@@ -85,19 +81,12 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         /// <returns>   A NoContentResult if the update was successful,
         ///             404 if no lending with the given ID has been found.
         /// </returns>
-        //TODO: remove test code, check for authentication
+        [Authorize]
         [HttpPut("{lendingId}")]
         public async Task<ActionResult> ChangeUserOfLending(int lendingId, int currentUserId ,string newUserId)
         {
-            //var currentUser = await getCurrentUser();
             var newUser = await _userManager.FindByIdAsync(newUserId);
-
             return await _lendingManagement.ChangeUserOfLending(lendingId, currentUserId, newUser);
-
-            /*if (User.Identity.IsAuthenticated)
-            {
-            }*/
-            //return Unauthorized();
         }
         
         /// <summary>
@@ -116,7 +105,6 @@ namespace device_wall_backend.Modules.Lendings.Boundary
             return await _userManager.FindByIdAsync(User.Identity.GetUserId());
         }
         
-        [AllowAnonymous]
         [HttpGet("lending-process")]
         public Task<ActionResult<Device>> GetDeviceForLendingProcess(int deviceId)
         {
