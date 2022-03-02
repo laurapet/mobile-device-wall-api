@@ -12,6 +12,6 @@ namespace device_wall_backend.Modules.Users.Control
         /// </summary>
         /// <param name="searchTerm">A String that must be contained in all returning usernames or names of the returning Users</param>
         /// <returns>A list of DeviceWallUser objects</returns>
-        public Task<ActionResult<IEnumerable<DeviceWallUser>>> GetUsersForSearch(string searchTerm);
+        public Task<ActionResult<IEnumerable<DeviceWallUser>>>GetUsersForSearch(string searchTerm);
     }
 }

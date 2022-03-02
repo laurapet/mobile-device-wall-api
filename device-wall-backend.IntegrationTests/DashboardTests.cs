@@ -178,6 +178,8 @@ namespace device_wall_backend.IntegrationTests
         public async Task GET_Dashboard_Filter_IsLent(bool isLent)
         {
             // Act
+            await TestClient.DeleteAsync($"lendings/{1}");
+            await TestClient.DeleteAsync($"lendings/{2}");
             var response = await TestClient.GetAsync($"Dashboard?isLent={isLent}");
             var deviceResults = JsonConvert.DeserializeObject<Device[]>(await response.Content.ReadAsStringAsync());
             // Assert
@@ -200,6 +202,8 @@ namespace device_wall_backend.IntegrationTests
         public async Task GET_Dashboard_Filter_IsLent_EmptyQuery(bool? isLent)
         {
             // Act
+            await TestClient.DeleteAsync($"lendings/{1}");
+            await TestClient.DeleteAsync($"lendings/{2}");
             var response = await TestClient.GetAsync($"Dashboard?isLent={isLent}");
             var deviceResults = JsonConvert.DeserializeObject<Device[]>(await response.Content.ReadAsStringAsync());
             // Assert
@@ -208,6 +212,7 @@ namespace device_wall_backend.IntegrationTests
             bool notLentProvided = false;
             foreach (Device device in deviceResults)
             {
+                Console.WriteLine(device.DeviceID+ " " + device.CurrentLending);
                 isLentProvided = (device.CurrentLending != null) || isLentProvided;
                 notLentProvided = (device.CurrentLending == null) || notLentProvided;
             }

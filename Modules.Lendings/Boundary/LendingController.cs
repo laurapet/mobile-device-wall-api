@@ -61,7 +61,7 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         /// </summary>
         /// <param name="lendingList">A List of DTOs containing a DeviceID and the IsLongterm attribute</param>
         /// <param name="userID">The userID of the user the lending is to be assigned to</param>
-        /// <returns>201 if all Devices have been lent successfully. 400 if one of the Devices is already lent. 404 if one of the devices doesn't exist</returns>
+        /// <returns>201 if all Devices have been lent successfully. 400 if one of the Devices is already lent. 404 if one of the devices or the user doesn't exist</returns>
         [HttpPost]
         public async Task<ActionResult> LendDevices([FromBody]List<LendingListDTO> lendingList, string userId)
         {
@@ -79,7 +79,8 @@ namespace device_wall_backend.Modules.Lendings.Boundary
         /// <param name="lendingID">The ID of the lending where the user is to be changed</param>
         /// <param name="newUserID">The ID of the new user that the lending is supposed to be assigned to</param>
         /// <returns>   A NoContentResult if the update was successful,
-        ///             404 if no lending with the given ID has been found.
+        ///             404 if no lending with the given ID or User with the given newUserId has been found.
+        ///             401 if the user is not authorized.
         /// </returns>
         [Authorize]
         [HttpPut("{lendingId}")]

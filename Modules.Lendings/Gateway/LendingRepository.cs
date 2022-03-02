@@ -112,6 +112,11 @@ namespace device_wall_backend.Modules.Lendings.Gateway
         public async Task<ActionResult<Device>> GetDeviceForLendingProcess(int deviceId)
         {
             var device = await _context.Devices.FindAsync(deviceId);
+
+            if (device == null)
+            {
+                return new NotFoundResult();
+            }
             _context.Entry(device).Reference(d => d.CurrentLending).Load();
             if (device.CurrentLending != null)
             {

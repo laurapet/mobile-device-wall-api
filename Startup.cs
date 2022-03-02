@@ -58,39 +58,6 @@ namespace device_wall_backend
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "device_wall_backend", Version = "v1"});
-                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows()
-                    {
-                        AuthorizationCode = new OpenApiOAuthFlow()
-                        {
-                            AuthorizationUrl = new Uri("https://git.slashwhy.de/oauth/authorize"),
-                            TokenUrl = new Uri("https://git.slashwhy.de/oauth/token"),
-                            Scopes = new Dictionary<string, string>
-                            {
-                                {"read_user", "reads the user"}
-                            }
-                        }
-                    }
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "oauth2"
-                            },
-                            Scheme = "oauth2",
-                            Name = "oauth2",
-                            In = ParameterLocation.Header
-                        },
-                        new List<string>()
-                    }
-                });
             });
             services.AddIdentity<DeviceWallUser, IdentityRole<int>>()
                 .AddEntityFrameworkStores<DeviceWallContext>();

@@ -14,8 +14,6 @@ services:
     environment:
       ConnectionStrings__DefaultConnection: "User ID =postgres;host=postgres_image;password=mobiledevicewall;Port=5432;Database=mobileDeviceWallDB;Pooling=true;"
       DB_CONNECTION_STRING: "host=postgres_image;password=mobiledevicewall;Port=5432;Database=mobileDeviceWallDB;"
-    #depends_on: 
-    #  - "postgres_image"
 
   postgres_image:
     image: postgres:latest
