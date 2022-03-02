@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Claims;
 using device_wall_backend.Data;
 using device_wall_backend.Modules.Dashboard.Control;
 using Microsoft.AspNetCore.Builder;
@@ -16,26 +10,13 @@ using Microsoft.OpenApi.Models;
 using device_wall_backend.Modules.Dashboard.Gateway;
 using device_wall_backend.Modules.Lendings.Control;
 using device_wall_backend.Modules.Lendings.Gateway;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Text.Json;
-using System.Threading.Tasks;
-using AspNet.Security.OAuth.GitLab;
-using device_wall_backend.Authentication;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Users.Control;
 using device_wall_backend.Modules.Users.Gateway;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 
 namespace device_wall_backend
 {
@@ -61,25 +42,27 @@ namespace device_wall_backend
             });
             services.AddIdentity<DeviceWallUser, IdentityRole<int>>()
                 .AddEntityFrameworkStores<DeviceWallContext>();
-            
+
             services.AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme=JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme=JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme=JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                    {
+                        options.Authority = "https://git.slashwhy.de";
+                        options.Audience = "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688";
+                        options.SaveToken = true;
+                    }
+                )
+                .AddCookie("Cookies", options =>
                 {
-                    options.Authority = "https://git.slashwhy.de";
-                    options.Audience = "fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688";
-                    options.SaveToken = true;
-                }
-            )
-            .AddCookie("Cookies",options =>
-            {
-                options.LoginPath = "/Account/login-callback";
-                options.Cookie.Name = "Cookies";
-            })/*.AddOAuth<GitLabAuthenticationOptions,MDWGitLabAuthHandler>*/
+                    options.LoginPath = "/Account/login-callback";
+                    options.Cookie.Name = "Cookies";
+                });
+            //GitLab Authentication if redirection is handeled by backend
+            /*
             .AddGitLab("GitLab",options =>
             {
                 options.SignInScheme = IdentityConstants.ExternalScheme;
@@ -113,7 +96,7 @@ namespace device_wall_backend
                         context.RunClaimActions(user.RootElement);
                     }
                 };
-            });
+            });*/
             services.AddHttpContextAccessor();
 
             services.AddCors();
@@ -160,10 +143,6 @@ namespace device_wall_backend
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "device_wall_backend v1");
                     c.RoutePrefix = string.Empty;
-                    c.OAuthClientId("fd2dcaf8dbff0e54d71d6d26cb7a2610f686528bb3b24cf40bd5b232645a5688");
-                    c.OAuthClientSecret("7844a873747524022ed2c966b011c0404c3207aa1948a4e0b3d74afed8e99dec");
-                    c.OAuth2RedirectUrl("/");
-                    c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
                 });
             }
             

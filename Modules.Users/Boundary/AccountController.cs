@@ -5,9 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using device_wall_backend.Models;
 using device_wall_backend.Modules.Users.Control;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,10 +16,10 @@ namespace device_wall_backend.Modules.Users.Boundary
     [Route("[controller]")]
     public class AccountController: ControllerBase
     {
-        private readonly Microsoft.AspNetCore.Identity.UserManager<DeviceWallUser> _userManager;
+        private readonly UserManager<DeviceWallUser> _userManager;
         private readonly SignInManager<DeviceWallUser> _signInManager;
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<DeviceWallUser> userManager, SignInManager<DeviceWallUser> signInManager)
+        public AccountController(UserManager<DeviceWallUser> userManager, SignInManager<DeviceWallUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -51,6 +49,8 @@ namespace device_wall_backend.Modules.Users.Boundary
             return Ok();
         }
 
+        //methods to use if GitLab authentication and redirection is handeled in the backhand
+        /*
         [HttpGet("external-login")]
         public async Task<IActionResult> ExternalLogin(string returnUrl="login-callback")
         {
@@ -96,7 +96,7 @@ namespace device_wall_backend.Modules.Users.Boundary
             }
             
             return Ok();
-        }
+        }*/
         
         [Authorize]
         [HttpGet("current-user")]
@@ -105,27 +105,6 @@ namespace device_wall_backend.Modules.Users.Boundary
             return await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
 
-        private async Task createTestUser()
-        {
-            var testUser = new DeviceWallUser()
-            {
-                Id = 1,
-                UserName = "testusername",
-                Name = "Testname",
-                AvatarUrl = "https://via.placeholder.com/50"
-            };
-
-            var user = await _userManager.FindByIdAsync("1");
-            if (user == null)
-            {
-                var result = await _userManager.CreateAsync(testUser);
-                if (result.Succeeded)
-                {
-                    Console.WriteLine("testuser created");
-                }
-            }
-        }
-        
         [HttpGet("logout")]
         public async void LogOut(string returnUrl = "login")
         {
